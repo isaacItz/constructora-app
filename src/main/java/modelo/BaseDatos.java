@@ -10,7 +10,7 @@ import com.mysql.cj.jdbc.exceptions.CommunicationsException;
 public class BaseDatos {
 
 	private Connection conexion;
-	private final String DEFAULT_URL = "jdbc:mysql://localhost:3306/consC?serverTimezone=UTC";
+	private final String DEFAULT_URL = "jdbc:mysql://lughub.duckdns.org:3306/consC?serverTimezone=UTC";
 
 	public BaseDatos(String user, char[] password, String host, String port)
 			throws SQLException, CommunicationsException {
