@@ -14,7 +14,7 @@ public class BaseDatos {
 	private Connection conexion;
 	private final String DEFAULT_URL = "jdbc:mysql://lughub.duckdns.org:3306/consC?serverTimezone=UTC";
 
-	public BaseDatos(String user, char[] password, String host, String port)
+	public BaseDatos(String user, char[] password, String host, Integer port)
 			throws SQLException, CommunicationsException {
 		if (user != null || password != null) {
 
@@ -28,7 +28,7 @@ public class BaseDatos {
 		}
 
 		else {
-			throw new SQLException("No Username or Password provided");
+			throw new SQLException("No Username or Password Provided");
 		}
 
 	}
