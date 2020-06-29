@@ -10,6 +10,10 @@ public class Actividad {
 	public Actividad() {
 	}
 
+	public Actividad(Integer clave) {
+		cve = clave;
+	}
+
 	public Actividad(Integer cve, String nombre, String descripcion, String uMedida) {
 		this.cve = cve;
 		this.nombre = nombre;
