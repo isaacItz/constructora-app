@@ -38,7 +38,6 @@ public class Main {
 				baseDatos = new BaseDatos(user, password, null, null);
 				Connection con = baseDatos.getConnection();
 				DatabaseMetaData db = con.getMetaData();
-				System.out.println(con.getMetaData().getClientInfoProperties());
 				System.out.println(baseDatos.getRoll());
 
 			} catch (SQLException ex) {
