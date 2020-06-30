@@ -3,20 +3,20 @@ package dao;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.mysql.cj.jdbc.exceptions.CommunicationsException;
 
-import modelo.BaseDatos;
 import modelo.Persona;
 import modelo.Utileria;
 
 public class PersonaDAO extends DAO<Persona, Integer> {
 
-	private final String INSERT = "INSERT INTO persona (cve_per, nom_per, ap_per, am_per, genero_per, fnac_per, edocivil_per, curp, "
-			+ "mail_per, tel_per) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	private final String INSERT = "INSERT INTO persona (nom_per, ap_per, am_per, genero_per, fnac_per, edocivil_per, curp, "
+			+ "mail_per, tel_per) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private final String MODIFICAR = "UPDATE persona set nom_per = ?, ap_per = ?, am_per = ?, genero_per = ?, fnac_per = ?, "
 			+ "edocivil_per = ?, curp = ?, mail_per = ?, tel_per = ? where cve_per = ?";
 	private final String OBTENER_TODOS = "SELECT * FROM persona";
@@ -24,39 +24,41 @@ public class PersonaDAO extends DAO<Persona, Integer> {
 	private final String BUSCAR = "SELECT * FROM persona WHERE nom_per = ?, ap_per = ?, am_per = ?, curp = ?";
 	private final String ELIMINAR = "DELETE FROM persona WHERE cve_per = ?";
 
-	public PersonaDAO(Connection con) {
+	PersonaDAO(Connection con) {
 		super(con);
 	}
 
 	@Override
 	public void insertar(Persona t) throws SQLException {
 		try {
-			stat = con.prepareStatement(INSERT);
-			if (t.getCve() != null) {
-				stat.setInt(1, t.getCve());
-			} else {
-				stat.setNull(1, java.sql.Types.INTEGER);
-
-			}
-			stat.setString(2, t.getNombre());
-			stat.setString(3, t.getApPaterno());
-			stat.setString(4, t.getApMaterno());
-			stat.setString(5, t.getGenero());
-			stat.setDate(6, Utileria.getDate(t.getFechaNac()));
-			stat.setString(7, t.getEdoCivil());
-			stat.setString(8, t.getCurp());
-			stat.setString(9, t.getMail());
+			stat = con.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
+			stat.setString(1, t.getNombre());
+			stat.setString(2, t.getApPaterno());
+			stat.setString(3, t.getApMaterno());
+			stat.setString(4, t.getGenero());
+			stat.setDate(5, Utileria.getDate(t.getFechaNac()));
+			stat.setString(6, t.getEdoCivil());
+			stat.setString(7, t.getCurp());
+			stat.setString(8, t.getMail());
 			if (t.getTelefono() != null)
-				stat.setLong(10, t.getTelefono());
+				stat.setLong(9, t.getTelefono());
 			else
-				stat.setNull(10, Types.INTEGER);
+				stat.setNull(9, Types.INTEGER);
 			if (stat.executeUpdate() == 0) {
 				throw new SQLException("Usuario ya Registrado");
+			} else {
+				set = stat.getGeneratedKeys();
+				if (set.next()) {
+					t.setCve(set.getInt(1));
+				} else {
+					throw new SQLException("No se ha Podico Asignar la PK");
+				}
 			}
 		} catch (SQLException e) {
 			throw e;
 		} finally {
 			cerrarSt();
+			cerrarRs();
 		}
 	}
 

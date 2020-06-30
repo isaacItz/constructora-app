@@ -1,4 +1,4 @@
-package modelo;
+package dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,6 +11,9 @@ public class BaseDatos {
 
 	private Connection conexion;
 	private final String DEFAULT_URL = "jdbc:mysql://lughub.duckdns.org:3306/consC?serverTimezone=UTC";
+
+	private TrabajadorConDAO trabajadorConDAO;
+	private PersonaDAO personaDAO;
 
 	public BaseDatos(String user, char[] password, String host, Integer port)
 			throws SQLException, CommunicationsException {
@@ -29,6 +32,20 @@ public class BaseDatos {
 			throw new SQLException("No Username or Password Provided");
 		}
 
+	}
+
+	public TrabajadorConDAO getTrabajadorConDAO() {
+		if (trabajadorConDAO == null) {
+			trabajadorConDAO = new TrabajadorConDAO(conexion);
+		}
+		return trabajadorConDAO;
+	}
+
+	public PersonaDAO getPersonaDAO() {
+		if (personaDAO == null) {
+			personaDAO = new PersonaDAO(conexion);
+		}
+		return personaDAO;
 	}
 
 	public void cerrarConexion() {

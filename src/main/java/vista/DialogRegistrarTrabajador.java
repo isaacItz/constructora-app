@@ -2,14 +2,18 @@ package vista;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
+
+import modelo.Main;
 
 public class DialogRegistrarTrabajador extends JDialog {
 
@@ -22,7 +26,7 @@ public class DialogRegistrarTrabajador extends JDialog {
 
 	public DialogRegistrarTrabajador() {
 		setModal(true);
-		setBounds(100, 100, 648, 474);
+		setBounds(100, 100, 740, 463);
 		BorderLayout borderLayout = new BorderLayout();
 		borderLayout.setVgap(5);
 		borderLayout.setHgap(10);
@@ -79,7 +83,15 @@ public class DialogRegistrarTrabajador extends JDialog {
 		JButton cancelButton = new JButton("Cancelar");
 		cancelButton.setActionCommand("Cancel");
 		buttonPane.add(cancelButton);
+		addWindowListener(new OyenteSalida());
 		validate();
 	}
 
+	class OyenteSalida extends WindowAdapter {
+		@Override
+		public void windowClosing(WindowEvent e) {
+			super.windowClosing(e);
+			Main.baseDatos.cerrarConexion();
+		}
+	}
 }
