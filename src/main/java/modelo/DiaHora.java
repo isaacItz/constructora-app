@@ -1,12 +1,13 @@
 package modelo;
 
-import java.time.LocalDateTime;
+
+import java.time.LocalTime;
 
 public class DiaHora {
 	private Integer cve;
 	private int dia;
-	private LocalDateTime horen;
-	private LocalDateTime horsal;
+	private LocalTime horen;
+	private LocalTime horsal;
 	private int cveHor;
 	
 	public DiaHora() {
@@ -18,7 +19,7 @@ public class DiaHora {
 		this.cve = cve;
 	}
 
-	public DiaHora(Integer cve, int dia, LocalDateTime horen, LocalDateTime horsal, int cveHor) {
+	public DiaHora(Integer cve, int dia, LocalTime horen, LocalTime horsal, int cveHor) {
 		super();
 		this.cve = cve;
 		this.dia = dia;
@@ -43,19 +44,19 @@ public class DiaHora {
 		this.dia = dia;
 	}
 
-	public LocalDateTime getHoren() {
+	public LocalTime getHoren() {
 		return horen;
 	}
 
-	public void setHoren(LocalDateTime horen) {
+	public void setHoren(LocalTime horen) {
 		this.horen = horen;
 	}
 
-	public LocalDateTime getHorsal() {
+	public LocalTime getHorsal() {
 		return horsal;
 	}
 
-	public void setHorsal(LocalDateTime horsal) {
+	public void setHorsal(LocalTime horsal) {
 		this.horsal = horsal;
 	}
 
