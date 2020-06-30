@@ -3,27 +3,30 @@ package vista;
 import java.awt.GridLayout;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-public class InicioSesion extends JFrame {
+public class InicioSesion extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField cajaUser;
 	private JPasswordField cajaPassword;
 	private JButton btnIngresar;
+	private boolean acepto;
 
 	public InicioSesion() {
-
+		super((javax.swing.JFrame) null, true);
 		setSize(400, 500);
 		setTitle("Inicio de Sesion");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -56,21 +59,30 @@ public class InicioSesion extends JFrame {
 		contentPane.add(panel);
 
 		btnIngresar = new JButton("Ingresar");
+		btnIngresar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				acepto = true;
+				dispose();
+			}
+		});
 		panel.add(btnIngresar);
 		setLocationRelativeTo(null);
 
 	}
 
-	public JTextField getCajaUser() {
-		return cajaUser;
+	public String getUser() {
+		return cajaUser.getText();
 	}
 
-	public JPasswordField getCajaPassword() {
-		return cajaPassword;
+	public char[] getPassword() {
+		return cajaPassword.getPassword();
 	}
 
 	public JButton getBtnIngresar() {
 		return btnIngresar;
 	}
 
+	public boolean acepto() {
+		return acepto;
+	}
 }

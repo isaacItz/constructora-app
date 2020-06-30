@@ -3,6 +3,7 @@ package dao;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,14 +15,14 @@ import modelo.Utileria;
 
 public class PersonaDAO extends DAO<Persona, Integer> {
 
-	final String INSERT = "INSERT INTO persona (cve_per, nom_per, ap_per, am_per, genero_per, fnac_per, edocivil_per, curp, "
+	private final String INSERT = "INSERT INTO persona (cve_per, nom_per, ap_per, am_per, genero_per, fnac_per, edocivil_per, curp, "
 			+ "mail_per, tel_per) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	final String MODIFICAR = "UPDATE persona set cve_per = ?, nom_per = ?, ap_per = ?, am_per = ?, genero_per = ?, fnac_per = ?, "
+	private final String MODIFICAR = "UPDATE persona set nom_per = ?, ap_per = ?, am_per = ?, genero_per = ?, fnac_per = ?, "
 			+ "edocivil_per = ?, curp = ?, mail_per = ?, tel_per = ? where cve_per = ?";
-	final String OBTENER_TODOS = "SELECT * FROM persona";
-	final String OBTENER_UNO = "select * FROM perosna WHERE cve_per = ?";
-	final String BUSCAR = "SELECT * FROM persona WHERE nom_per = ?, ap_per = ?, am_per = ?, curp = ?";
-	final String ELIMINAR = "DELETE FROM persona WHERE cve_per = ?";
+	private final String OBTENER_TODOS = "SELECT * FROM persona";
+	private final String OBTENER_UNO = "select * FROM persona WHERE cve_per = ?";
+	private final String BUSCAR = "SELECT * FROM persona WHERE nom_per = ?, ap_per = ?, am_per = ?, curp = ?";
+	private final String ELIMINAR = "DELETE FROM persona WHERE cve_per = ?";
 
 	public PersonaDAO(Connection con) {
 		super(con);
@@ -31,7 +32,11 @@ public class PersonaDAO extends DAO<Persona, Integer> {
 	public void insertar(Persona t) throws SQLException {
 		try {
 			stat = con.prepareStatement(INSERT);
-			stat.setInt(1, t.getCve());
+			if (t.getCve() != null) {
+				stat.setInt(1, t.getCve());
+			} else {
+				stat.setNull(1, java.sql.Types.INTEGER);
+			}
 			stat.setString(2, t.getNombre());
 			stat.setString(3, t.getApPaterno());
 			stat.setString(4, t.getApMaterno());
@@ -40,7 +45,10 @@ public class PersonaDAO extends DAO<Persona, Integer> {
 			stat.setString(7, t.getEdoCivil());
 			stat.setString(8, t.getCurp());
 			stat.setString(9, t.getMail());
-			stat.setLong(10, t.getTelefono());
+			if (t.getTelefono() != null)
+				stat.setLong(10, t.getTelefono());
+			else
+				stat.setNull(10, Types.INTEGER);
 			if (stat.executeUpdate() == 0) {
 				throw new SQLException("Usuario ya Registrado");
 			}
@@ -55,16 +63,16 @@ public class PersonaDAO extends DAO<Persona, Integer> {
 	public void modificar(Persona t) throws SQLException {
 		try {
 			stat = con.prepareStatement(MODIFICAR);
-			stat.setInt(1, t.getCve());
-			stat.setString(2, t.getNombre());
-			stat.setString(3, t.getApPaterno());
-			stat.setString(4, t.getApMaterno());
-			stat.setString(5, t.getGenero());
-			stat.setDate(6, Utileria.getDate(t.getFechaNac()));
-			stat.setString(7, t.getEdoCivil());
-			stat.setString(8, t.getCurp());
-			stat.setString(9, t.getMail());
-			stat.setLong(10, t.getTelefono());
+			stat.setString(1, t.getNombre());
+			stat.setString(2, t.getApPaterno());
+			stat.setString(3, t.getApMaterno());
+			stat.setString(4, t.getGenero());
+			stat.setDate(5, Utileria.getDate(t.getFechaNac()));
+			stat.setString(6, t.getEdoCivil());
+			stat.setString(7, t.getCurp());
+			stat.setString(8, t.getMail());
+			stat.setLong(9, t.getTelefono());
+			stat.setInt(10, t.getCve());
 			if (stat.executeUpdate() == 0) {
 				throw new SQLException("Usuario ya Registrado");
 			}
@@ -147,7 +155,7 @@ public class PersonaDAO extends DAO<Persona, Integer> {
 				personas.add(convertir(set));
 			}
 		} catch (Exception e) {
-			System.err.println(e);
+			e.printStackTrace();
 		} finally {
 			cerrarRs();
 			cerrarSt();
@@ -174,8 +182,17 @@ public class PersonaDAO extends DAO<Persona, Integer> {
 
 	public static void main(String[] args) throws CommunicationsException, SQLException {
 
-		BaseDatos bd = new BaseDatos("daniel", "TorresD21".toCharArray(), null, null);
+		BaseDatos bd = new BaseDatos("isaac", "holadocker".toCharArray(), null, null);
 		PersonaDAO per = new PersonaDAO(bd.getConnection());
-		per.obtenerTodos().stream().forEach(x -> System.out.println(x));
+		Persona yo = per.obtener(1);
+		yo.setNombre("Ronaldo");
+		yo.setApMaterno("perez");
+		yo.setMail("yoMero@myMail.com");
+		yo.setCurp("micurpaquiva");
+		yo.setTelefono(null);
+		yo.setCve(null);
+		per.insertar(yo);
+		per.obtenerTodos().forEach(x -> System.out.println(x));
+		System.out.println("adios");
 	}
 }

@@ -5,8 +5,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import javax.swing.JOptionPane;
-
 import com.mysql.cj.jdbc.exceptions.CommunicationsException;
 
 public class BaseDatos {
@@ -24,7 +22,7 @@ public class BaseDatos {
 				conexion = DriverManager.getConnection("jdbc:mysql://" + host + port + "/consC?serverTimezone=UTC",
 						user, String.valueOf(password));
 			System.out.println("conexion creada");
-			JOptionPane.showMessageDialog(null, "bienvenido" + getRoll());
+			System.out.println("rol: " + getRoll());
 		}
 
 		else {
