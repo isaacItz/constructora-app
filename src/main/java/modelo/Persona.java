@@ -14,21 +14,20 @@ public class Persona {
 	private String curp;
 	private String mail;
 	private Long telefono;
+	private int direccion;
 
 	public Persona() {
-		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Persona(Integer cve) {
-		super();
 		this.cve = cve;
 	}
 
 	public Persona(Integer cve, String nombre, String apPaterno, String apMaterno, String genero, LocalDate fechaNac,
-			String edoCivil, String curp, String mail, Long telefono) {
+			String edoCivil, String curp, String mail, Long telefono, int direccion) {
 		super();
 		this.cve = cve;
+		this.direccion = direccion;
 		this.nombre = nombre;
 		this.edoCivil = edoCivil;
 		this.apPaterno = apPaterno;
@@ -112,6 +111,14 @@ public class Persona {
 		this.telefono = telefono;
 	}
 
+	public int getDireccion() {
+		return direccion;
+	}
+
+	public void setDireccion(int direccion) {
+		this.direccion = direccion;
+	}
+
 	public String getEdoCivil() {
 		return edoCivil;
 	}
@@ -124,7 +131,7 @@ public class Persona {
 	public String toString() {
 		return "Persona [cve=" + cve + ", nombre=" + nombre + ", apPaterno=" + apPaterno + ", apMaterno=" + apMaterno
 				+ ", genero=" + genero + ", fechaNac=" + fechaNac + ", edoCivil=" + edoCivil + ", curp=" + curp
-				+ ", mail=" + mail + ", telefono=" + telefono + "]";
+				+ ", mail=" + mail + ", telefono=" + telefono + ", direccion=" + direccion + "]";
 	}
 
 }

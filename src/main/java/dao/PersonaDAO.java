@@ -36,6 +36,7 @@ public class PersonaDAO extends DAO<Persona, Integer> {
 				stat.setInt(1, t.getCve());
 			} else {
 				stat.setNull(1, java.sql.Types.INTEGER);
+
 			}
 			stat.setString(2, t.getNombre());
 			stat.setString(3, t.getApPaterno());

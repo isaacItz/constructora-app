@@ -1,16 +1,15 @@
 package modelo;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 
 import vista.InicioSesion;
+import vista.VistaPrincipal;
 
 public class Main {
 	private static InicioSesion login;
-	private static BaseDatos baseDatos;
+	public static BaseDatos baseDatos;
 
 	public static void main(String... argumentos) {
 		login = new InicioSesion();
@@ -22,9 +21,8 @@ public class Main {
 			password = login.getPassword();
 			try {
 				baseDatos = new BaseDatos(user, password, null, null);
-				Connection con = baseDatos.getConnection();
-				DatabaseMetaData db = con.getMetaData();
-
+				VistaPrincipal vistaP = new VistaPrincipal();
+				vistaP.setVisible(true);
 			} catch (SQLException e) {
 				JOptionPane.showMessageDialog(null, "Usuario o Contraseña Incorrecto");
 			}
