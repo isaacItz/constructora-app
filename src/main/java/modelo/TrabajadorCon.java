@@ -12,7 +12,6 @@ public class TrabajadorCon {
 	private int cvePer;
 
 	public TrabajadorCon() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public TrabajadorCon(Integer clave) {
