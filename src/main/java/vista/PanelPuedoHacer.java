@@ -5,14 +5,24 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+
+import dao.ActividadesDAO;
+import modelo.Actividad;
+import modelo.Main;
+import modelo.PuedoHacer;
 
 public class PanelPuedoHacer extends JPanel {
 
@@ -27,12 +37,8 @@ public class PanelPuedoHacer extends JPanel {
 	private DefaultListModel<String> modeloDisponibles;
 
 	public PanelPuedoHacer(String[] actividades) {
+
 		setLayout(new BorderLayout(0, 0));
-
-		modeloAgregados = new DefaultListModel<>();
-		modeloAgregados.copyInto(actividades);
-
-		modeloDisponibles = new DefaultListModel<>();
 
 		JPanel panel = new JPanel();
 //		add(panel, BorderLayout.NORTH);
@@ -40,6 +46,8 @@ public class PanelPuedoHacer extends JPanel {
 		JLabel lblBuscar = new JLabel("Buscar:");
 		panel.add(lblBuscar);
 
+		agregados = new JList<>();
+		disponibles = new JList<>();
 		busqueda = new JTextField();
 		panel.add(busqueda);
 		busqueda.setColumns(20);
@@ -53,16 +61,14 @@ public class PanelPuedoHacer extends JPanel {
 		gbl_panel_1.rowWeights = new double[] { 1.0, Double.MIN_VALUE };
 		panel_1.setLayout(gbl_panel_1);
 
-		JPanel lblNewLabel = new JPanel();
-		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-		gbc_lblNewLabel.insets = new Insets(0, 0, 0, 5);
-		gbc_lblNewLabel.gridx = 0;
-		gbc_lblNewLabel.gridy = 0;
-		panel_1.add(lblNewLabel, gbc_lblNewLabel);
-		lblNewLabel.setLayout(new BorderLayout(0, 0));
-
-		disponibles = new JList<>();
-		lblNewLabel.add(disponibles, BorderLayout.NORTH);
+		JPanel panelIzq = new JPanel();
+		GridBagConstraints gbc_panelIzq = new GridBagConstraints();
+		gbc_panelIzq.fill = GridBagConstraints.BOTH;
+		gbc_panelIzq.insets = new Insets(0, 0, 0, 5);
+		gbc_panelIzq.gridx = 0;
+		gbc_panelIzq.gridy = 0;
+		panel_1.add(panelIzq, gbc_panelIzq);
+		panelIzq.setLayout(new BorderLayout(0, 0));
 
 		JPanel lblNewLabel_1 = new JPanel();
 		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
@@ -84,18 +90,55 @@ public class PanelPuedoHacer extends JPanel {
 		});
 		lblNewLabel_1.add(btnRemover);
 
-		JPanel lblNewLabel_2 = new JPanel();
-		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
-		gbc_lblNewLabel_2.gridx = 2;
-		gbc_lblNewLabel_2.gridy = 0;
-		panel_1.add(lblNewLabel_2, gbc_lblNewLabel_2);
-		lblNewLabel_2.setLayout(new BorderLayout(0, 0));
-
-		agregados = new JList<>();
-		lblNewLabel_2.add(agregados, BorderLayout.NORTH);
-		disponibles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		JPanel panelDer = new JPanel();
+		GridBagConstraints gbc_panelDer = new GridBagConstraints();
+		gbc_panelDer.fill = GridBagConstraints.BOTH;
+		gbc_panelDer.gridx = 2;
+		gbc_panelDer.gridy = 0;
+		panel_1.add(panelDer, gbc_panelDer);
+		panelDer.setLayout(new BorderLayout(0, 0));
 		agregados.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+		modeloAgregados = new DefaultListModel<>();
+//		modeloAgregados.copyInto(actividades);
+
+		modeloDisponibles = new DefaultListModel<>();
+
+		agregados.setModel(modeloAgregados);
+
+		JScrollPane scrollIzq = new JScrollPane(disponibles);
+		panelIzq.add(scrollIzq, BorderLayout.CENTER);
+
+		JScrollPane scrollDer = new JScrollPane(agregados);
+		panelDer.add(scrollDer, BorderLayout.CENTER);
+
+		disponibles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		disponibles.setModel(modeloDisponibles);
+
+		for (String string : actividades) {
+			modeloDisponibles.addElement(string);
+		}
+		validate();
+
+	}
+
+	public PuedoHacer[] getPuedoHacer() {
+		List<PuedoHacer> list = new ArrayList<>();
+		Enumeration<String> listaAgregados = modeloAgregados.elements();
+		while (listaAgregados.hasMoreElements()) {
+			ActividadesDAO actDao = Main.baseDatos.getActividadesDAO();
+			PuedoHacer puedo = new PuedoHacer();
+			Actividad act = new Actividad();
+			act.setNombre(listaAgregados.nextElement());
+			try {
+				puedo.setCveAct(actDao.buscar(act).getCve());
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			puedo.setStatus("Activo");
+			list.add(puedo);
+		}
+		return list.toArray(new PuedoHacer[list.size()]);
 	}
 
 	private void moverDerecha() {

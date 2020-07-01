@@ -6,6 +6,7 @@ public class Colonia {
 	private String tipoAsen;
 	private String zona;
 	private int cpCP;
+	private int cveCiu;
 
 	public Colonia() {
 		super();
@@ -16,13 +17,14 @@ public class Colonia {
 		this.cve = clave;
 	}
 
-	public Colonia(Integer cve, String nombre, String tipoAsen, String zona, int cpCP) {
+	public Colonia(Integer cve, String nombre, String tipoAsen, String zona, int cpCP, int cveCiu) {
 		super();
 		this.cve = cve;
 		this.nombre = nombre;
 		this.tipoAsen = tipoAsen;
 		this.zona = zona;
 		this.cpCP = cpCP;
+		this.cveCiu = cveCiu;
 	}
 
 	public Integer getCve() {
@@ -65,10 +67,18 @@ public class Colonia {
 		this.cpCP = cpCP;
 	}
 
+	public int getCveCiu() {
+		return cveCiu;
+	}
+
+	public void setCveCiu(int cveCiu) {
+		this.cveCiu = cveCiu;
+	}
+
 	@Override
 	public String toString() {
 		return "Colonia [cve=" + cve + ", nombre=" + nombre + ", tipoAsen=" + tipoAsen + ", zona=" + zona + ", cpCP="
-				+ cpCP + "]";
+				+ cpCP + ", cveCiu=" + cveCiu + "]";
 	}
 
 }

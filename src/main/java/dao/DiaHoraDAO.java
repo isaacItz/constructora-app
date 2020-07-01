@@ -13,14 +13,14 @@ import modelo.Utileria;
 
 public class DiaHoraDAO extends DAO<DiaHora, Integer> {
 
-	private final String INSERT = "INSERT INTO diahora (dia_diahor ,he_diahor ,hs_diahor,cve_hor ) VALUES (?, ?, ?, ?)";
+	private final String INSERT = "INSERT INTO diahora (dia_diahor, he_diahor, hs_diahor, cve_hor ) VALUES (?, ?, ?, ?)";
 	private final String MODIFICAR = "UPDATE diahora SET dia_diahor= ?, heo_diahor= ? WHERE cve_hor = ?";
 	private final String OBTENER_TODOS = "SELECT * FROM diahora";
 	private final String OBTENER_UNO = "SELECT * FROM diahora WHERE cve_hor = ?";
 	private final String BUSCAR = "SELECT * FROM diahora WHERE cve_hor = ? ";
 	private final String ELIMINAR = "DELETE FROM diahora WHERE cve_hor = ?";
 
-	protected DiaHoraDAO(Connection con) {
+	DiaHoraDAO(Connection con) {
 		super(con);
 		// TODO Auto-generated constructor stub
 	}

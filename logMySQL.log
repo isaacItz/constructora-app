@@ -1,0 +1,14 @@
+2020-07-01T06:07:29.220337Z 0 [System] [MY-010116] [Server] /usr/local/mysql-8.0.20-linux-glibc2.12-x86_64/bin/mysqld (mysqld 8.0.20) starting as process 152625
+2020-07-01T06:07:29.586495Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+2020-07-01T06:07:33.372447Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+2020-07-01T06:07:36.260837Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Socket: '/tmp/mysqlx.sock' bind-address: '::' port: 33060
+2020-07-01T06:07:36.871789Z 0 [System] [MY-010229] [Server] Starting XA crash recovery...
+2020-07-01T06:07:36.934302Z 0 [System] [MY-010232] [Server] XA crash recovery finished.
+2020-07-01T06:07:37.949207Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.
+2020-07-01T06:07:38.387252Z 0 [System] [MY-010931] [Server] /usr/local/mysql-8.0.20-linux-glibc2.12-x86_64/bin/mysqld: ready for connections. Version: '8.0.20'  socket: '/tmp/mysql.sock'  port: 3306  MySQL Community Server - GPL.
+2020-07-01T06:09:50.224545Z 9 [Warning] [MY-010056] [Server] Host name 'customer-ZITA-48-132.megared.net.mx' could not be resolved: Name or service not known
+2020-07-01T06:58:41.131604Z 16 [Warning] [MY-010056] [Server] Host name 'customer-ZITA-49-150.megared.net.mx' could not be resolved: Name or service not known
+2020-07-01T07:28:50.410853Z 24 [Warning] [MY-010058] [Server] Hostname 'internettl.org' does not resolve to '104.152.52.2'.
+2020-07-01T08:49:40.375498Z 53 [Warning] [MY-010058] [Server] Hostname 'worker-15.sfj.censys-scanner.com' does not resolve to '192.35.168.251'.
+2020-07-01T08:55:19.408447Z 0 [Warning] [MY-010909] [Server] /usr/local/mysql-8.0.20-linux-glibc2.12-x86_64/bin/mysqld: Forcing close of thread 52  user: 'isaac'.
+2020-07-01T08:55:23.814606Z 0 [System] [MY-010910] [Server] /usr/local/mysql-8.0.20-linux-glibc2.12-x86_64/bin/mysqld: Shutdown complete (mysqld 8.0.20)  MySQL Community Server - GPL.

@@ -124,4 +124,9 @@ public class PanelDatosPersona extends JPanel {
 		return per;
 	}
 
+	public boolean validar() {
+
+		return false;
+	}
+
 }

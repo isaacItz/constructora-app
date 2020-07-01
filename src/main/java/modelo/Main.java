@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 import dao.BaseDatos;
-import dao.PersonaDAO;
 import vista.InicioSesion;
 import vista.VistaPrincipal;
 
@@ -25,8 +24,6 @@ public class Main {
 				baseDatos = new BaseDatos(user, password, null, null);
 				VistaPrincipal vistaP = new VistaPrincipal();
 				vistaP.setVisible(true);
-				PersonaDAO personaDAO = baseDatos.getPersonaDAO();
-				personaDAO.obtenerTodos().forEach(z -> System.out.println(z));
 
 			} catch (SQLException e) {
 				JOptionPane.showMessageDialog(null, "Usuario o Contraseña Incorrecto");

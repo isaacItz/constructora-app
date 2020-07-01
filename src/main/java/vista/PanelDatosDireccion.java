@@ -1,14 +1,23 @@
 package vista;
 
 import java.awt.GridLayout;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.util.List;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import dao.CiudadDAO;
+import dao.ColoniaDAO;
+import dao.EstadoDAO;
+import modelo.Ciudad;
+import modelo.Colonia;
 import modelo.Direccion;
+import modelo.Estado;
+import modelo.Main;
 import modelo.Utileria;
 
 public class PanelDatosDireccion extends JPanel {
@@ -18,14 +27,19 @@ public class PanelDatosDireccion extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JTextField nombre;
 	private JTextField numero;
-	private JTextField orientacion;
-	private JTextField ciudad;
+	private JComboBox<String> orientacion;
+	private JComboBox<String> ciudad;
 	private JTextField codigoPostal;
-	private JTextField Colonia;
+	private JComboBox<String> colonia;
 	private JTextField referencias;
 	private JTextField entreCalle1;
 	private JTextField entreCalle2;
-	private JTextField tipoVia;
+	private JComboBox<String> tipoVia;
+	private JComboBox<String> estado;
+	private List<Estado> estados;
+	private List<Ciudad> ciudades;
+	private List<Colonia> cols;
+	private int cp;
 
 	public PanelDatosDireccion() {
 		setLayout(new GridLayout(0, 2, 0, 0));
@@ -40,9 +54,8 @@ public class PanelDatosDireccion extends JPanel {
 		JLabel lblTipoDeVia = new JLabel("Tipo de Via");
 		add(lblTipoDeVia);
 
-		tipoVia = new JTextField();
+		tipoVia = new JComboBox<>();
 		add(tipoVia);
-		tipoVia.setColumns(10);
 
 		JLabel lblApellidoPaterno = new JLabel("Numero");
 		add(lblApellidoPaterno);
@@ -68,8 +81,7 @@ public class PanelDatosDireccion extends JPanel {
 		JLabel lblNombre_3_1 = new JLabel("Orientacion");
 		add(lblNombre_3_1);
 
-		orientacion = new JTextField();
-		orientacion.setColumns(10);
+		orientacion = new JComboBox<>();
 		add(orientacion);
 
 		JLabel lblNombre_3_2 = new JLabel("Referencias");
@@ -81,15 +93,13 @@ public class PanelDatosDireccion extends JPanel {
 		JLabel lblNombre_3_3 = new JLabel("Estado");
 		add(lblNombre_3_3);
 
-		JComboBox<String> estadoCivil = new JComboBox<>();
-		estadoCivil.setModel(new DefaultComboBoxModel<String>(new String[] { "Casado", "Soltero", "Separado" }));
-		add(estadoCivil);
+		estado = new JComboBox<>();
+		add(estado);
 
 		JLabel lblNombre_3 = new JLabel("Ciudad");
 		add(lblNombre_3);
 
-		ciudad = new JTextField();
-		ciudad.setColumns(10);
+		ciudad = new JComboBox<>();
 		add(ciudad);
 
 		JLabel lblNombre_1_1 = new JLabel("Codigo Postal");
@@ -102,21 +112,94 @@ public class PanelDatosDireccion extends JPanel {
 		JLabel lblNombre_2_1 = new JLabel("Colonia");
 		add(lblNombre_2_1);
 
-		Colonia = new JTextField();
-		Colonia.setColumns(10);
-		add(Colonia);
+		colonia = new JComboBox<>();
+		add(colonia);
+		iniciar();
+		estado.addActionListener(z -> getCiudades());
+		codigoPostal.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				getCols(Utileria.getInteger(codigoPostal));
+			}
+		});
+		codigoPostal.addActionListener(z -> getCols(Utileria.getInteger(codigoPostal)));
+		getCiudades();
+	}
 
+	private void iniciar() {
+		EstadoDAO daoEstado = Main.baseDatos.getEstadoDAO();
+		estados = daoEstado.obtenerTodos();
+		for (Estado estado2 : estados) {
+			estado.addItem(estado2.getNombre());
+		}
+		String tipoVia[] = { "Andador", "Avenida", "Boulevard", "Calle", "Callejón", "Calzada", "Cerrada", "Circuito",
+				"Continuación", "Periférico", "Privada", "Prolongación", "Retorno", "Ninguna" };
+		for (String s : tipoVia) {
+			this.tipoVia.addItem(s);
+		}
+
+		String orientaciones[] = { "Norte", "Sur", "Poniente", "Oriente", "Ninguno" };
+		for (String string : orientaciones) {
+			orientacion.addItem(string);
+		}
+
+	}
+
+	private void getCiudades() {
+		CiudadDAO daoCiudad = Main.baseDatos.getCiudadDAO();
+		ciudad.removeAllItems();
+		ciudades = daoCiudad.ciudadesEstado(estados.get(estado.getSelectedIndex()));
+		for (Ciudad ciu : ciudades) {
+			ciudad.addItem(ciu.getMunic());
+		}
+	}
+
+	private Ciudad getCiudadSeleccionada() {
+		return ciudades.get(ciudad.getSelectedIndex());
+	}
+
+	private Colonia getColoniaSeleccionada() {
+		return cols.get(colonia.getSelectedIndex());
+	}
+
+	private void getCols(int cp) {
+
+		if (this.cp != cp) {
+			ColoniaDAO daoCols = Main.baseDatos.getColoniaDAO();
+			colonia.removeAllItems();
+			cols = daoCols.getColoniasCP(cp);
+			for (modelo.Colonia col : cols) {
+				colonia.addItem(col.getNombre());
+			}
+		}
+
+	}
+
+	public boolean validarCP() {
+		if (cols.size() > 0) {
+			getCiudadSeleccionada();
+			if (cols.get(0).getCveCiu() == getCiudadSeleccionada().getCve()) {
+				return true;
+			}
+		}
+
+		return false;
+
+	}
+
+	public boolean validar() {
+
+		return false;
 	}
 
 	public Direccion getDireccion() {
 		Direccion dir = new Direccion();
 		dir.setCalle(nombre.getText());
-		dir.setTipovia(tipoVia.getText());
+		dir.setTipovia(tipoVia.getSelectedItem().toString());
 		dir.setEntrecalles(entreCalle1.getText().concat(":").concat(entreCalle2.getText()));
-		dir.setOrientacion(orientacion.getText());
+		dir.setOrientacion(orientacion.getSelectedItem().toString());
 		dir.setReferencias(referencias.getText());
-		dir.setCveCol(Utileria.getInteger(codigoPostal));
-
+		dir.setCveCol(getColoniaSeleccionada().getCve());
 		return dir;
 	}
 

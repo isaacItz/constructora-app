@@ -2,6 +2,7 @@ package vista;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.util.Date;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -11,89 +12,90 @@ import javax.swing.JTextField;
 
 import com.toedter.calendar.JDateChooser;
 
+import dao.BaseDatos;
+import modelo.TrabajadorCon;
+import modelo.Utileria;
+
 public class PanelTipoTrabajador extends JPanel {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JTextField textField;
+	private JTextField sueldo;
 	private JComboBox<String> roles;
-	private JDateChooser dateChooser_1;
-	private PanelPuedoHacer panelPuedoHacer;
-	private String[] actividades;
+	private JDateChooser finContrato;
+	private JDateChooser inicioContrato;
+	private JCheckBox chckbxVariable;
 
 	public PanelTipoTrabajador() {
 
-		panelPuedoHacer = null;
 		setLayout(new BorderLayout(0, 0));
 
 		JPanel panel = new JPanel();
-		add(panel, BorderLayout.NORTH);
-		panel.setLayout(new GridLayout(0, 1, 0, 0));
+		add(panel, BorderLayout.CENTER);
+		panel.setLayout(new GridLayout(0, 2, 0, 0));
+
+		JLabel lblNewLabel = new JLabel("Tipo de trabajador:");
+		panel.add(lblNewLabel);
+
+		roles = new JComboBox<>();
+		roles = new JComboBox<>(BaseDatos.ROLES);
+
+		panel.add(roles);
+
+		JLabel lblInicioDelContrato = new JLabel("Inicio del Contrato:");
+		panel.add(lblInicioDelContrato);
+		inicioContrato = new JDateChooser();
+		panel.add(inicioContrato);
+
+		JLabel lblFinDelContrato = new JLabel("Fin del Contrato:");
+		panel.add(lblFinDelContrato);
+
+		finContrato = new JDateChooser();
+		panel.add(finContrato);
+
+		JLabel lblSueldo = new JLabel("Sueldo:");
+		panel.add(lblSueldo);
 
 		JPanel panel_1 = new JPanel();
 		panel.add(panel_1);
+		panel_1.setLayout(new BorderLayout(0, 0));
 
-		JLabel lblNewLabel = new JLabel("Tipo de trabajador:");
-		panel_1.add(lblNewLabel);
+		chckbxVariable = new JCheckBox("Variable");
+		chckbxVariable.addActionListener(x -> desabilitarSueldo());
+		panel_1.add(chckbxVariable, BorderLayout.EAST);
 
-		roles = new JComboBox<>();
-		roles.addActionListener(x -> {
-			agregarPuedoHacer();
-		});
-		panel_1.add(roles);
-
-		JPanel panel_3 = new JPanel();
-		panel.add(panel_3);
-
-		JLabel lblInicioDelContrato = new JLabel("Inicio del Contrato:");
-		panel_3.add(lblInicioDelContrato);
-
-		JDateChooser dateChooser = new JDateChooser();
-		panel_3.add(dateChooser);
-
-		JPanel panel_3_1 = new JPanel();
-		panel.add(panel_3_1);
-
-		JLabel lblFinDelContrato = new JLabel("Fin del Contrato:");
-		panel_3_1.add(lblFinDelContrato);
-
-		dateChooser_1 = new JDateChooser();
-		panel_3_1.add(dateChooser_1);
-
-		JPanel panel_2 = new JPanel();
-		panel.add(panel_2);
-
-		JLabel lblSueldo = new JLabel("Sueldo:");
-		panel_2.add(lblSueldo);
-
-		textField = new JTextField();
-		panel_2.add(textField);
-		textField.setColumns(10);
-
-		JCheckBox chckbxVariable = new JCheckBox("Variable");
-		panel_2.add(chckbxVariable);
-
-		JPanel panel_4 = new JPanel();
-		panel.add(panel_4);
+		sueldo = new JTextField();
+		panel_1.add(sueldo, BorderLayout.CENTER);
+		sueldo.setColumns(10);
+		inicioContrato.setDate(new Date());
 
 	}
 
-	private void agregarPuedoHacer() {
-		int index = roles.getSelectedIndex();
-		if (index > -1) {
-			String rol = roles.getSelectedItem().toString();
-			if (rol.equals("Chalan") || rol.equals("Maestro de obra")) {
-				if (panelPuedoHacer == null) {
-					panelPuedoHacer = new PanelPuedoHacer(actividades);
-				}
-				add(panelPuedoHacer, BorderLayout.CENTER);
-			} else {
-				if (panelPuedoHacer != null) {
-					remove(panelPuedoHacer);
-				}
-			}
+	public TrabajadorCon getTrabajador() {
+		TrabajadorCon trabajador = new TrabajadorCon();
+		trabajador.setFechIniCon(Utileria.getLocalDate(inicioContrato.getDate()));
+		trabajador.setFechFinCon(Utileria.getLocalDate(finContrato.getDate()));
+		trabajador.setPuesto(roles.getSelectedItem().toString());
+		trabajador.setSalario(Utileria.getDouble(sueldo.getText()));
+
+		return trabajador;
+
+	}
+
+	public boolean validar() {
+		return false;
+	}
+
+	private void desabilitarSueldo() {
+		if (chckbxVariable.isSelected()) {
+			sueldo.setText(null);
 		}
+		sueldo.setEnabled(!chckbxVariable.isSelected());
+	}
+
+	public JComboBox<String> getRoles() {
+		return roles;
 	}
 
 }

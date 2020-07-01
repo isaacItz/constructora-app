@@ -2,12 +2,30 @@ package modelo;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 import javax.swing.JTextField;
 
 public class Utileria {
+
+	private static SimpleDateFormat sdt;
+
+	public static LocalDate getLocalDate(java.util.Date fecha) {
+		if (sdt == null)
+			sdt = new SimpleDateFormat("yyyy-MM-dd");
+		return LocalDate.parse(sdt.format(fecha));
+
+	}
+
+	public static Double getDouble(String num) {
+		try {
+			return Double.parseDouble(num);
+		} catch (Exception e) {
+			return 0.0;
+		}
+	}
 
 	public static LocalDate getLocalDate(Date fecha) {
 		return LocalDate.parse(fecha.toString());

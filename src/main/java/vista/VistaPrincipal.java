@@ -38,6 +38,7 @@ public class VistaPrincipal extends JFrame {
 			dialogRegistro.setVisible(true);
 
 		});
+
 		setLocationRelativeTo(null);
 	}
 

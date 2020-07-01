@@ -7,30 +7,32 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import modelo.Estado;
+import modelo.Actividad;
 
-public class EstadoDAO extends DAO<Estado, Integer> {
-	private final String INSERT = "INSERT INTO estado (nom_est) VALUES (?)";
-	private final String MODIFICAR = "UPDATE estado SET nom_est= ?";
-	private final String OBTENER_TODOS = "SELECT * FROM estado";
-	private final String OBTENER_UNO = "SELECT * FROM estado WHERE nom_est = ?";
-	private final String BUSCAR = "SELECT * FROM estado WHERE nom_est = ? ";
-	private final String ELIMINAR = "DELETE FROM estado WHERE nom_est = ?";
+public class ActividadesDAO extends DAO<Actividad, Integer> {
 
-	EstadoDAO(Connection con) {
+	private final String INSERT = "INSERT INTO actividad (nom_act, desc_act, umedida_act) VALUES (?, ?, ?)";
+	private final String MODIFICAR = "UPDATE actividad SET nom_act= ?, desc_act= ? WHERE cve_act= ?";
+	private final String OBTENER_TODOS = "SELECT * FROM actividad";
+	private final String OBTENER_UNO = "SELECT * FROM actividad WHERE cve_act = ?";
+	private final String BUSCAR = "SELECT * FROM actividad WHERE nom_act = ?";
+	private final String ELIMINAR = "DELETE FROM actividad WHERE cve_act = ?";
+
+	ActividadesDAO(Connection con) {
 		super(con);
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public void insertar(Estado t) throws SQLException {
+	public void insertar(Actividad t) throws SQLException {
 		try {
 			stat = con.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
 
 			stat.setString(1, t.getNombre());
-
+			stat.setString(2, t.getDescripcion());
+			stat.setString(3, t.getuMedida());
 			if (stat.executeUpdate() == 0) {
-				throw new SQLException("estado ya Registrada");
+				throw new SQLException("Actividad ya Registrada");
 			} else {
 				set = stat.getGeneratedKeys();
 				if (set.next()) {
@@ -46,18 +48,15 @@ public class EstadoDAO extends DAO<Estado, Integer> {
 			cerrarSt();
 			cerrarRs();
 		}
-
 	}
 
 	@Override
-	public void modificar(Estado t) throws SQLException {
-		// TODO Auto-generated method stub
+	public void modificar(Actividad t) throws SQLException {
 		try {
 			stat = con.prepareStatement(MODIFICAR);
-			stat.setString(1, t.getNombre());
 
 			if (stat.executeUpdate() == 0) {
-				throw new SQLException("estado ya Registrado");
+				throw new SQLException("horario ya Registrado");
 			}
 		} catch (SQLException e) {
 			throw e;
@@ -67,8 +66,7 @@ public class EstadoDAO extends DAO<Estado, Integer> {
 	}
 
 	@Override
-	public void eliminar(Estado t) throws SQLException {
-		// TODO Auto-generated method stub
+	public void eliminar(Actividad t) throws SQLException {
 		try {
 			stat = con.prepareStatement(ELIMINAR);
 			stat.setInt(1, t.getCve());
@@ -80,21 +78,21 @@ public class EstadoDAO extends DAO<Estado, Integer> {
 		} finally {
 			cerrarSt();
 		}
-
 	}
+	// cve_diahor dia_diahor he_diahor hs_diahor cve_hor
 
 	@Override
-	public Estado obtener(Integer clave) throws SQLException {
-		// TODO Auto-generated method stub
-		Estado es = null;
+	public Actividad obtener(Integer clave) throws SQLException {
+		Actividad dh = null;
+
 		try {
 			stat = con.prepareStatement(OBTENER_UNO);
 			stat.setInt(1, clave);
 			set = stat.executeQuery();
 			if (set.next()) {
-				es = convertir(set);
+				dh = convertir(set);
 			} else {
-				throw new SQLException("No Existe el estado");
+				throw new SQLException("No Existe la actividad");
 			}
 		} catch (Exception e) {
 			throw e;
@@ -102,20 +100,22 @@ public class EstadoDAO extends DAO<Estado, Integer> {
 			cerrarRs();
 			cerrarSt();
 		}
-		return es;
+
+		return dh;
 	}
 
 	@Override
-	public Estado buscar(Estado objeto) throws SQLException {
-		Estado es = null;
+	public Actividad buscar(Actividad objeto) throws SQLException {
+		Actividad dh = null;
+
 		try {
 			stat = con.prepareStatement(BUSCAR);
-			stat.setInt(1, objeto.getCve());
+			stat.setString(1, objeto.getNombre());
 			set = stat.executeQuery();
 			if (set.next()) {
-				es = convertir(set);
+				dh = convertir(set);
 			} else {
-				throw new SQLException("No Existe el estado");
+				throw new SQLException("No Existe el horario");
 			}
 		} catch (Exception e) {
 			throw e;
@@ -123,18 +123,18 @@ public class EstadoDAO extends DAO<Estado, Integer> {
 			cerrarRs();
 			cerrarSt();
 		}
-		return es;
+
+		return dh;
 	}
 
 	@Override
-	public List<Estado> obtenerTodos() {
-		// TODO Auto-generated method stub
-		List<Estado> es = new ArrayList<>();
+	public List<Actividad> obtenerTodos() {
+		List<Actividad> dh = new ArrayList<>();
 		try {
 			stat = con.prepareStatement(OBTENER_TODOS);
 			set = stat.executeQuery();
 			while (set.next()) {
-				es.add(convertir(set));
+				dh.add(convertir(set));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -142,16 +142,18 @@ public class EstadoDAO extends DAO<Estado, Integer> {
 			cerrarRs();
 			cerrarSt();
 		}
-		return es;
+		return dh;
 	}
 
 	@Override
-	protected Estado convertir(ResultSet set) throws SQLException {
-		// TODO Auto-generated method stub
-		Estado es = new Estado();
-		es.setCve(set.getInt(1));
-		es.setNombre(set.getString("nom_est"));
-		return es;
+	protected Actividad convertir(ResultSet set) throws SQLException {
+		Actividad dh = new Actividad();
+		dh.setCve(set.getInt(1));
+		dh.setNombre(set.getString("nom_act"));
+		dh.setDescripcion(set.getString("desc_act"));
+		dh.setuMedida(set.getString("umedida_act"));
+
+		return dh;
 	}
 
 }

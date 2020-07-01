@@ -4,12 +4,15 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -35,7 +38,6 @@ public class PanelHorario extends JPanel {
 	private JTextField salidaMartes;
 	private JTextField salidaMiercoles;
 	private JTextField salidaJueves;
-	private boolean diario;
 	private JCheckBox chckbxFijo;
 	private JCheckBox chckbxVariable;
 	private JButton btnLimpiar;
@@ -48,7 +50,6 @@ public class PanelHorario extends JPanel {
 	private JCheckBox domingo;
 
 	public PanelHorario() {
-		diario = false;
 		setLayout(new BorderLayout(0, 0));
 
 		JPanel panel = new JPanel();
@@ -59,7 +60,6 @@ public class PanelHorario extends JPanel {
 
 		chckbxFijo = new JCheckBox("Fijo");
 		chckbxFijo.addActionListener(x -> {
-			diario = false;
 			chckbxVariable.setSelected(false);
 			validarCajas();
 			limpiar();
@@ -69,7 +69,6 @@ public class PanelHorario extends JPanel {
 
 		chckbxVariable = new JCheckBox("Variable");
 		chckbxVariable.addActionListener(x -> {
-			diario = true;
 			chckbxFijo.setSelected(false);
 			validarCajas();
 		});
@@ -152,6 +151,7 @@ public class PanelHorario extends JPanel {
 		panel_1.add(lblEntrada, gbc_lblEntrada);
 
 		lunes = new JCheckBox("");
+		lunes.setName("Lunes");
 		lunes.addActionListener(x -> setEnabled(entradaLunes, salidaLunes));
 		GridBagConstraints gbc_lunes = new GridBagConstraints();
 		gbc_lunes.insets = new Insets(0, 0, 5, 5);
@@ -160,6 +160,7 @@ public class PanelHorario extends JPanel {
 		panel_1.add(lunes, gbc_lunes);
 
 		martes = new JCheckBox("");
+		martes.setName("Martes");
 		martes.addActionListener(x -> setEnabled(entradaMartes, salidaMartes));
 		GridBagConstraints gbc_martes = new GridBagConstraints();
 		gbc_martes.insets = new Insets(0, 0, 5, 5);
@@ -168,6 +169,7 @@ public class PanelHorario extends JPanel {
 		panel_1.add(martes, gbc_martes);
 
 		miercoles = new JCheckBox("");
+		miercoles.setName("Miercoles");
 		miercoles.addActionListener(x -> setEnabled(entradaMiercoles, salidaMiercoles));
 		GridBagConstraints gbc_miercoles = new GridBagConstraints();
 		gbc_miercoles.insets = new Insets(0, 0, 5, 5);
@@ -176,6 +178,7 @@ public class PanelHorario extends JPanel {
 		panel_1.add(miercoles, gbc_miercoles);
 
 		jueves = new JCheckBox("");
+		jueves.setName("Jueves");
 		jueves.addActionListener(x -> setEnabled(entradaJueves, salidaJueves));
 		GridBagConstraints gbc_jueves = new GridBagConstraints();
 		gbc_jueves.insets = new Insets(0, 0, 5, 5);
@@ -184,6 +187,7 @@ public class PanelHorario extends JPanel {
 		panel_1.add(jueves, gbc_jueves);
 
 		viernes = new JCheckBox("");
+		viernes.setName("Viernes");
 		viernes.addActionListener(x -> setEnabled(entradaViernes, salidaViernes));
 		GridBagConstraints gbc_viernes = new GridBagConstraints();
 		gbc_viernes.insets = new Insets(0, 0, 5, 5);
@@ -192,6 +196,7 @@ public class PanelHorario extends JPanel {
 		panel_1.add(viernes, gbc_viernes);
 
 		sabado = new JCheckBox("");
+		sabado.setName("Sabado");
 		sabado.addActionListener(x -> setEnabled(entradaSabado, salidaSabado));
 		GridBagConstraints gbc_sabado = new GridBagConstraints();
 		gbc_sabado.insets = new Insets(0, 0, 5, 5);
@@ -200,6 +205,7 @@ public class PanelHorario extends JPanel {
 		panel_1.add(sabado, gbc_sabado);
 
 		domingo = new JCheckBox("");
+		domingo.setName("Domingo");
 		domingo.addActionListener(x -> setEnabled(entradaDomingo, salidaDomingo));
 		GridBagConstraints gbc_domingo = new GridBagConstraints();
 		gbc_domingo.insets = new Insets(0, 0, 5, 0);
@@ -354,13 +360,9 @@ public class PanelHorario extends JPanel {
 
 	public Horario getHorario() {
 		Horario hor = new Horario();
+		hor.setFecha(LocalDate.now());
+		hor.setTipo(chckbxFijo.isSelected() ? "Fijo" : "Variable");
 		return hor;
-	}
-
-	public DiaHora[] getDiaHora() {
-		List<DiaHora> diasHora = new ArrayList<>();
-
-		return diasHora.toArray(new DiaHora[diasHora.size()]);
 	}
 
 	private void validarCajas() {
@@ -387,6 +389,48 @@ public class PanelHorario extends JPanel {
 		for (JTextField caja : cajas) {
 			caja.setText(null);
 		}
+	}
+
+	public DiaHora[] getDiaHora() {
+		JCheckBox[] dias = { this.lunes, martes, miercoles, jueves, viernes, sabado, domingo };
+		JTextField[] camposhoras = { this.entradaLunes, salidaLunes, entradaMartes, salidaMartes, entradaMiercoles,
+				salidaMiercoles, entradaJueves, salidaJueves, entradaViernes, salidaViernes, entradaSabado,
+				salidaSabado, entradaDomingo, salidaDomingo };
+		List<DiaHora> diashora = new ArrayList<>();
+
+		for (int i = 0; i < dias.length; i++) {
+			System.out.println(dias[i].getName());
+			if (dias[i].isSelected()) {
+				if (!camposhoras[i * 2].getText().isEmpty() || !camposhoras[i * 2 + 1].getText().isEmpty()) {
+					if (new Integer(camposhoras[i * 2 + 1].getText().split(":")[0]) > new Integer(
+							camposhoras[i * 2].getText().split(":")[0])) {
+						DiaHora diaHora = new DiaHora();
+						diaHora.setDia(i + 1);
+						diaHora.setHoren(LocalTime.parse(camposhoras[i * 2].getText()));
+						diaHora.setHorsal(LocalTime.parse(camposhoras[i * 2 + 1].getText()));
+						diashora.add(diaHora);
+					} else {
+						if (new Integer(camposhoras[i * 2 + 1].getText().split(":")[0]) > new Integer(
+								camposhoras[i * 2].getText().split(":")[0])
+								&& new Integer(camposhoras[i * 2 + 1].getText().split(":")[1]) > new Integer(
+										camposhoras[i * 2].getText().split(":")[1])) {
+							DiaHora diaHora = new DiaHora();
+							diaHora.setDia(i + 1);
+							diaHora.setHoren(LocalTime.parse(camposhoras[i * 2].getText()));
+							diaHora.setHorsal(LocalTime.parse(camposhoras[i * 2 + 1].getText()));
+							diashora.add(diaHora);
+						} else {
+							JOptionPane.showMessageDialog(null, "Datos no validos para el día " + dias[i].getName());
+							return null;
+						}
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "Datos no validos para el día " + dias[i].getName());
+					return null;
+				}
+			}
+		}
+		return diashora.toArray(new DiaHora[diashora.size()]);
 	}
 
 }

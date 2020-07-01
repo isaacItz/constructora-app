@@ -7,30 +7,29 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import modelo.Ciudad;
-import modelo.Estado;
+import modelo.PuedoHacer;
 
-public class CiudadDAO extends DAO<Ciudad, Integer> {
+public class PuedoHacerDAO extends DAO<PuedoHacer, Integer> {
 
-	private final String INSERT = "INSERT INTO ciudad (mun_ciu ,nom_ciu ,cve_est) VALUES (?, ?, ?)";
-	private final String MODIFICAR = "UPDATE ciudad SET mun_ciu= ?, nom_ciu= ? WHERE cve_est = ?";
-	private final String OBTENER_TODOS = "SELECT * FROM ciudad";
-	private final String OBTENER_UNO = "SELECT * FROM ciudad WHERE cve_ciu = ?";
-	private final String BUSCAR = "SELECT * FROM ciudad WHERE cve_est = ? ORDER BY mun_ciu";
-	private final String ELIMINAR = "DELETE FROM ciudad WHERE cve_ciu = ?";
+	private final String INSERT = "INSERT INTO puedohacer (status_pue, cve_act, cve_tracon) VALUES (?, ?, ?)";
+	private final String MODIFICAR = "UPDATE puedohacer SET status_pue= ?, cve_act= ? WHERE cve_pue = ?";
+	private final String OBTENER_TODOS = "SELECT * FROM puedohacer";
+	private final String OBTENER_UNO = "SELECT * FROM puedohacer WHERE cve_pue= ?";
+	private final String BUSCAR = "SELECT * FROM puedohacer WHERE cve_pue = ?";
+	private final String ELIMINAR = "DELETE FROM puedohacer WHERE cve_ciu = ?";
 
-	CiudadDAO(Connection con) {
+	PuedoHacerDAO(Connection con) {
 		super(con);
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public void insertar(Ciudad t) throws SQLException {
+	public void insertar(PuedoHacer t) throws SQLException {
 		try {
 			stat = con.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
-			stat.setString(1, t.getMunic());
-			stat.setString(2, t.getNombre());
-			stat.setInt(3, t.getCveEst());
+			stat.setString(1, t.getStatus());
+			stat.setInt(2, t.getCveAct());
+			stat.setInt(3, t.getCveTracom());
 
 			if (stat.executeUpdate() == 0) {
 				throw new SQLException("ciudad ya Registrada");
@@ -53,15 +52,14 @@ public class CiudadDAO extends DAO<Ciudad, Integer> {
 	}
 
 	@Override
-	public void modificar(Ciudad t) throws SQLException {
+	public void modificar(PuedoHacer t) throws SQLException {
 		try {
 			stat = con.prepareStatement(MODIFICAR);
-			stat.setString(1, t.getMunic());
-			stat.setString(2, t.getNombre());
-			stat.setInt(3, t.getCveEst());
+			stat.setString(1, t.getStatus());
+			stat.setInt(2, t.getCveTracom());
 
 			if (stat.executeUpdate() == 0) {
-				throw new SQLException("ciudad ya Registrado");
+				throw new SQLException("PuedoHacer ya Registrado");
 			}
 		} catch (SQLException e) {
 			throw e;
@@ -71,7 +69,7 @@ public class CiudadDAO extends DAO<Ciudad, Integer> {
 	}
 
 	@Override
-	public void eliminar(Ciudad t) throws SQLException {
+	public void eliminar(PuedoHacer t) throws SQLException {
 		try {
 			stat = con.prepareStatement(ELIMINAR);
 			stat.setInt(1, t.getCve());
@@ -87,8 +85,8 @@ public class CiudadDAO extends DAO<Ciudad, Integer> {
 	}
 
 	@Override
-	public Ciudad obtener(Integer clave) throws SQLException {
-		Ciudad c = null;
+	public PuedoHacer obtener(Integer clave) throws SQLException {
+		PuedoHacer c = null;
 		try {
 			stat = con.prepareStatement(OBTENER_UNO);
 			stat.setInt(1, clave);
@@ -108,8 +106,8 @@ public class CiudadDAO extends DAO<Ciudad, Integer> {
 	}
 
 	@Override
-	public Ciudad buscar(Ciudad objeto) throws SQLException {
-		Ciudad c = null;
+	public PuedoHacer buscar(PuedoHacer objeto) throws SQLException {
+		PuedoHacer c = null;
 		try {
 			stat = con.prepareStatement(BUSCAR);
 			stat.setInt(1, objeto.getCve());
@@ -129,8 +127,8 @@ public class CiudadDAO extends DAO<Ciudad, Integer> {
 	}
 
 	@Override
-	public List<Ciudad> obtenerTodos() {
-		List<Ciudad> c = new ArrayList<>();
+	public List<PuedoHacer> obtenerTodos() {
+		List<PuedoHacer> c = new ArrayList<>();
 		try {
 			stat = con.prepareStatement(OBTENER_TODOS);
 			set = stat.executeQuery();
@@ -148,30 +146,12 @@ public class CiudadDAO extends DAO<Ciudad, Integer> {
 
 	// cve_ciu mun_ciu nom_ciu cve_est
 	@Override
-	protected Ciudad convertir(ResultSet set) throws SQLException {
-		Ciudad c = new Ciudad();
+	protected PuedoHacer convertir(ResultSet set) throws SQLException {
+		PuedoHacer c = new PuedoHacer();
 		c.setCve(set.getInt(1));
-		c.setMunic(set.getString("mun_ciu"));
-		c.setNombre(set.getString("nom_ciu"));
-		c.setCveEst(set.getInt("cve_est"));
-		return c;
-	}
-
-	public List<Ciudad> ciudadesEstado(Estado est) {
-		List<Ciudad> c = new ArrayList<>();
-		try {
-			stat = con.prepareStatement(BUSCAR);
-			stat.setInt(1, est.getCve());
-			set = stat.executeQuery();
-			while (set.next()) {
-				c.add(convertir(set));
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			cerrarRs();
-			cerrarSt();
-		}
+		c.setStatus(set.getString("status_pue"));
+		c.setCveTracom(set.getInt("cve_tracon"));
+		c.setCveAct(set.getInt("cve_act"));
 		return c;
 	}
 

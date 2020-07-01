@@ -12,16 +12,15 @@ import modelo.Utileria;
 
 public class HorarioDAO extends DAO<Horario, Integer> {
 
-	private final String INSERT = "INSERT INTO horario (fecha_hor, tipo_hor) VALUES (?, ?)";
+	private final String INSERT = "INSERT INTO horario (fecha_hor, tipo_hor, cve_tracon) VALUES (?, ?, ?)";
 	private final String MODIFICAR = "UPDATE horario SET fecha_hor= ?, tipo_hor= ? WHERE cve_tracon = ?";
 	private final String OBTENER_TODOS = "SELECT * FROM horario";
 	private final String OBTENER_UNO = "SELECT * FROM horario WHERE cve_hor = ?";
 	private final String BUSCAR = "SELECT * FROM horario WHERE fecha_hor = ? AND tipo_hor = ? ";
 	private final String ELIMINAR = "DELETE FROM horario WHERE cve_hor = ?";
 
-	protected HorarioDAO(Connection con) {
+	HorarioDAO(Connection con) {
 		super(con);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -31,9 +30,10 @@ public class HorarioDAO extends DAO<Horario, Integer> {
 			stat = con.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
 			stat.setDate(1, Utileria.getDate(t.getFecha()));
 			stat.setString(2, t.getTipo());
+			stat.setInt(3, t.getCveTracon());
 
 			if (stat.executeUpdate() == 0) {
-				throw new SQLException("Usuario ya Registrado");
+				throw new SQLException("Horario ya Registrado");
 			} else {
 				set = stat.getGeneratedKeys();
 				if (set.next()) {
@@ -152,6 +152,7 @@ public class HorarioDAO extends DAO<Horario, Integer> {
 		hr.setCve(set.getInt(1));
 		hr.setFecha(Utileria.getLocalDate(set.getDate("fecha_hor")));
 		hr.setTipo(set.getString("tipo_hor"));
+		hr.setCveTracon(set.getInt("cve_tracon"));
 
 		return hr;
 	}

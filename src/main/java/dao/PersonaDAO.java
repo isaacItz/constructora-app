@@ -16,7 +16,7 @@ import modelo.Utileria;
 public class PersonaDAO extends DAO<Persona, Integer> {
 
 	private final String INSERT = "INSERT INTO persona (nom_per, ap_per, am_per, genero_per, fnac_per, edocivil_per, curp, "
-			+ "mail_per, tel_per) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			+ "mail_per, cve_dir, tel_per) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private final String MODIFICAR = "UPDATE persona set nom_per = ?, ap_per = ?, am_per = ?, genero_per = ?, fnac_per = ?, "
 			+ "edocivil_per = ?, curp = ?, mail_per = ?, tel_per = ? where cve_per = ?";
 	private final String OBTENER_TODOS = "SELECT * FROM persona";
@@ -40,10 +40,11 @@ public class PersonaDAO extends DAO<Persona, Integer> {
 			stat.setString(6, t.getEdoCivil());
 			stat.setString(7, t.getCurp());
 			stat.setString(8, t.getMail());
+			stat.setInt(9, t.getDireccion());
 			if (t.getTelefono() != null)
-				stat.setLong(9, t.getTelefono());
+				stat.setLong(10, t.getTelefono());
 			else
-				stat.setNull(9, Types.INTEGER);
+				stat.setNull(10, Types.INTEGER);
 			if (stat.executeUpdate() == 0) {
 				throw new SQLException("Usuario ya Registrado");
 			} else {
