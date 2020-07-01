@@ -180,9 +180,4 @@ public class TrabajadorConDAO extends DAO<TrabajadorCon, Integer> {
 
 	}
 
-	@Override
-	public List<TrabajadorCon> buscarPatron(TrabajadorCon Objeto) {
-		return null;
-	}
-
 }

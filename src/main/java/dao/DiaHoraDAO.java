@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import modelo.DiaHora;
+import modelo.Horario;
 import modelo.Utileria;
 
 public class DiaHoraDAO extends DAO<DiaHora, Integer> {
@@ -163,10 +164,23 @@ public class DiaHoraDAO extends DAO<DiaHora, Integer> {
 		return dh;
 	}
 
-	@Override
-	public List<DiaHora> buscarPatron(DiaHora Objeto) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<DiaHora> obtenerDeHorario(Horario objeto) {
+		List<DiaHora> lista = new ArrayList<>();
+		try {
+			stat = con.prepareStatement(BUSCAR);
+			stat.setInt(1, objeto.getCve());
+			set = stat.executeQuery();
+			while (set.next()) {
+				lista.add(convertir(set));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			cerrarRs();
+			cerrarSt();
+		}
+
+		return lista;
 	}
 
 }

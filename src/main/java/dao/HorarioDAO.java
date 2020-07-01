@@ -156,9 +156,4 @@ public class HorarioDAO extends DAO<Horario, Integer> {
 		return hr;
 	}
 
-	@Override
-	public List<Horario> buscarPatron(Horario Objeto) {
-		return null;
-	}
-
 }

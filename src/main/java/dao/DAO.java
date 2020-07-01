@@ -29,8 +29,6 @@ public abstract class DAO<T, K> {
 
 	public abstract List<T> obtenerTodos();
 
-	public abstract List<T> buscarPatron(T Objeto);
-
 	protected abstract T convertir(ResultSet set) throws SQLException;
 
 	public void cerrarSt() {
