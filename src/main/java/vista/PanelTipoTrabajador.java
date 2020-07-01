@@ -84,7 +84,38 @@ public class PanelTipoTrabajador extends JPanel {
 	}
 
 	public boolean validar() {
-		return false;
+		if (!Utileria.validarDateChooser(inicioContrato)) {
+			Utileria.error("Fecha de Inicio no Valida");
+			return false;
+		}
+		if (!Utileria.esMayorAHoy(inicioContrato)) {
+			Utileria.error("Selecciona fecha de Inicio de Contrato Valida");
+			return false;
+		}
+
+		if (!Utileria.validarDateChooser(finContrato)) {
+			Utileria.error("Fecha de Fin de Contrato no Valida");
+			return false;
+		}
+		if (!Utileria.esDespues(null, finContrato)) {
+			Utileria.error("Selecciona fecha de Fin de Contrato Valida");
+			return false;
+		}
+
+		if (!Utileria.esAntes(inicioContrato, finContrato)) {
+			Utileria.error("La Fecha de Inicio no Puede ser Mayor a la de Fin del Contrato");
+			return false;
+		}
+
+		if (!chckbxVariable.isSelected()) {
+			if (!Utileria.tieneDouble(sueldo)) {
+				Utileria.error("Ingrese un Sueldo Valido");
+				sueldo.requestFocus();
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	private void desabilitarSueldo() {

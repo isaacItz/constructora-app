@@ -160,7 +160,6 @@ public class PanelDatosPersona extends JPanel {
 				return false;
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 		if (mail.getText().isEmpty()) {
 			Utileria.error("Ingrese un correo Electronico");

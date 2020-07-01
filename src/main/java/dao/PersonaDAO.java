@@ -128,7 +128,7 @@ public class PersonaDAO extends DAO<Persona, Integer> {
 		Persona per = null;
 		try {
 			stat = con.prepareStatement(BUSCAR);
-			stat.setString(1, objeto.getNombre());
+			stat.setString(1, objeto.getCurp());
 			set = stat.executeQuery();
 			if (set.next()) {
 				per = convertir(set);

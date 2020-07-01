@@ -119,7 +119,8 @@ public class PanelDatosDireccion extends JPanel {
 		codigoPostal.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				getCols(Utileria.getInteger(codigoPostal));
+				if (!codigoPostal.getText().isEmpty())
+					getCols(Utileria.getInteger(codigoPostal));
 			}
 		});
 		codigoPostal.addActionListener(z -> getCols(Utileria.getInteger(codigoPostal)));

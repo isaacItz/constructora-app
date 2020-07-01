@@ -400,7 +400,6 @@ public class PanelHorario extends JPanel {
 		List<DiaHora> diashora = new ArrayList<>();
 
 		for (int i = 0; i < dias.length; i++) {
-			System.out.println(dias[i].getName());
 			if (dias[i].isSelected()) {
 				if (!camposhoras[i * 2].getText().isEmpty() || !camposhoras[i * 2 + 1].getText().isEmpty()) {
 					if (validarHora(camposhoras[i * 2], camposhoras[i * 2 + 1])) {
@@ -436,8 +435,14 @@ public class PanelHorario extends JPanel {
 	}
 
 	private boolean validarHora(JTextField t1, JTextField t2) {
-		LocalTime ti1 = LocalTime.parse(t1.getText());
-		LocalTime ti2 = LocalTime.parse(t2.getText());
+		LocalTime ti1 = null;
+		LocalTime ti2 = null;
+		try {
+			ti1 = LocalTime.parse(t1.getText());
+			ti2 = LocalTime.parse(t2.getText());
+		} catch (Exception e) {
+			return false;
+		}
 
 		return ti1.isBefore(ti2);
 	}

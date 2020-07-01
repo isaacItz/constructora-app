@@ -2,10 +2,13 @@ package dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.mysql.cj.jdbc.exceptions.CommunicationsException;
+
+import modelo.Utileria;
 
 public class BaseDatos {
 
@@ -23,7 +26,7 @@ public class BaseDatos {
 	private DireccionDao direccionDAO;
 	private PuedoHacerDAO puedoHacerDAO;
 
-	public static final String ROLES[] = { "Secretaria", "Chalan" };
+	public static final String ROLES[] = { "Recursos Humanos", "Chalan" };
 
 	public BaseDatos(String user, char[] password, String host, Integer port)
 			throws SQLException, CommunicationsException {
@@ -136,6 +139,26 @@ public class BaseDatos {
 				return string;
 		}
 		return null;
+	}
+
+	public void crearUser(String user, String pass, String rol) {
+		String sql = "CREATE USER ?@'%' identified by ? default role ?";
+		try {
+			PreparedStatement ps = conexion.prepareStatement(sql);
+			ps.setString(1, user);
+			ps.setString(2, pass);
+			ps.setString(3, rol);
+			Utileria.mensaje("Usuario Registrado");
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public static void main(String[] args) throws CommunicationsException, SQLException {
+		BaseDatos bd = new BaseDatos("isaac", "holadocker".toCharArray(), null, null);
+		bd.crearUser("roberto", "carlos", BaseDatos.ROLES[0]);
 	}
 
 	private boolean probarRol(String rol) {

@@ -17,6 +17,8 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 import modelo.Actividad;
 import modelo.DiaHora;
 import modelo.Direccion;
@@ -25,6 +27,7 @@ import modelo.Main;
 import modelo.Persona;
 import modelo.PuedoHacer;
 import modelo.TrabajadorCon;
+import modelo.Utileria;
 
 public class DialogRegistrarTrabajador extends JDialog {
 
@@ -122,18 +125,18 @@ public class DialogRegistrarTrabajador extends JDialog {
 				GridBagConstraints gbc_panel = new GridBagConstraints();
 				if (panelPuedoHacer == null) {
 					panelPuedoHacer = new PanelPuedoHacer(actividades);
-					gbc_panel.fill = GridBagConstraints.BOTH;
-					gbc_panel.gridx = 1;
-					gbc_panel.gridy = 2;
-
 				}
+				gbc_panel.fill = GridBagConstraints.BOTH;
+				gbc_panel.gridx = 1;
+				gbc_panel.gridy = 2;
 				contentPanel.add(panelPuedoHacer, gbc_panel);
-				validate();
 			} else {
 				if (panelPuedoHacer != null) {
 					remove(panelPuedoHacer);
 				}
+
 			}
+			validate();
 		}
 	}
 
@@ -142,19 +145,11 @@ public class DialogRegistrarTrabajador extends JDialog {
 		Direccion dir = panelDireccion.getDireccion();
 		Persona per = panelPersona.getPersona();
 		TrabajadorCon tra = panelTipoTra.getTrabajador();
-		PuedoHacer[] puedoHacer = panelPuedoHacer.getPuedoHacer();
+		PuedoHacer[] puedoHacer = null;
+		if (roles.getSelectedIndex() > 0)
+			puedoHacer = panelPuedoHacer.getPuedoHacer();
 		Horario hor = panelHorario.getHorario();
 		DiaHora[] diasHora = panelHorario.getDiaHora();
-		System.out.println(dir);
-		System.out.println(per);
-		System.out.println(tra);
-		for (PuedoHacer puedo : puedoHacer) {
-			System.out.println(puedo);
-		}
-		System.out.println(hor);
-		for (DiaHora diaHora : diasHora) {
-			System.out.println(diaHora);
-		}
 ////////////////////////////////
 		try {
 			Main.baseDatos.getDireccionDAO().insertar(dir);
@@ -176,12 +171,14 @@ public class DialogRegistrarTrabajador extends JDialog {
 			e.printStackTrace();
 		}
 
-		for (PuedoHacer puedo : puedoHacer) {
-			puedo.setCveTracom(tra.getCve());
-			try {
-				Main.baseDatos.getPuedoHacerDAO().insertar(puedo);
-			} catch (SQLException e) {
-				e.printStackTrace();
+		if (roles.getSelectedIndex() > 0) {
+			for (PuedoHacer puedo : puedoHacer) {
+				puedo.setCveTracom(tra.getCve());
+				try {
+					Main.baseDatos.getPuedoHacerDAO().insertar(puedo);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 
@@ -201,15 +198,23 @@ public class DialogRegistrarTrabajador extends JDialog {
 				e.printStackTrace();
 			}
 		}
-		
+
+		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?";
+		String pwd = RandomStringUtils.random(10, characters);
+
+//		Main.baseDatos.commit();
+		String user = per.getApPaterno().concat(per.getNombre()).concat(per.getCve().toString());
+		Main.baseDatos.crearUser(user, pwd, roles.getSelectedItem().toString());
+
+		Utileria.mensaje("Usuario: " + user + "\nContraseña: " + pwd);
 		Main.baseDatos.commit();
-		
 		System.out.println(dir);
 		System.out.println(per);
 		System.out.println(tra);
-		for (PuedoHacer puedo : puedoHacer) {
-			System.out.println(puedo);
-		}
+		if (roles.getSelectedIndex() > 0)
+			for (PuedoHacer puedo : puedoHacer) {
+				System.out.println(puedo);
+			}
 		System.out.println(hor);
 		for (DiaHora diaHora : diasHora) {
 			System.out.println(diaHora);
@@ -218,12 +223,22 @@ public class DialogRegistrarTrabajador extends JDialog {
 
 	private void validarEmpleado() {
 		if (panelPersona.validar()) {
+			System.out.println("persona");
 			if (panelDireccion.validar()) {
+				System.out.println("Direccion");
 				if (panelHorario.validar()) {
+					System.out.println("Horario");
 					if (panelTipoTra.validar()) {
-						if (panelPuedoHacer.validar()) {
+						System.out.println("TipoTra");
+						if (roles.getSelectedIndex() > 0) {
+							if (panelPuedoHacer.validar()) {
+								System.out.println("puedo Hacer");
+								registrarPersona();
+							}
+						} else {
 							registrarPersona();
 						}
+
 					}
 				}
 			}

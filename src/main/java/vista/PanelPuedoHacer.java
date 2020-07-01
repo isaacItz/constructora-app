@@ -23,6 +23,7 @@ import dao.ActividadesDAO;
 import modelo.Actividad;
 import modelo.Main;
 import modelo.PuedoHacer;
+import modelo.Utileria;
 
 public class PanelPuedoHacer extends JPanel {
 
@@ -142,6 +143,10 @@ public class PanelPuedoHacer extends JPanel {
 	}
 
 	public boolean validar() {
+		if (getPuedoHacer().length == 0) {
+			Utileria.error("Seleccione Por lo Menus Una Actividad");
+			return false;
+		}
 		return getPuedoHacer().length > 0;
 	}
 
