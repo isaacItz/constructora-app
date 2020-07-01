@@ -10,7 +10,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.toedter.calendar.JDateChooser;
-import javax.swing.JButton;
 
 public class PanelTipoTrabajador extends JPanel {
 	/**

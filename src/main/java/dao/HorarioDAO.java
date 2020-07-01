@@ -10,14 +10,14 @@ import java.util.List;
 import modelo.Horario;
 import modelo.Utileria;
 
-public class HorarioDAO  extends DAO<Horario, Integer>{
-	
+public class HorarioDAO extends DAO<Horario, Integer> {
+
 	private final String INSERT = "INSERT INTO horario (fecha_hor, tipo_hor) VALUES (?, ?)";
 	private final String MODIFICAR = "UPDATE horario SET fecha_hor= ?, tipo_hor= ? WHERE cve_tracon = ?";
 	private final String OBTENER_TODOS = "SELECT * FROM horario";
-	private final String OBTENER_UNO = "SELECT * FROM horario WHERE cve_tracon = ?";
+	private final String OBTENER_UNO = "SELECT * FROM horario WHERE cve_hor = ?";
 	private final String BUSCAR = "SELECT * FROM horario WHERE fecha_hor = ? AND tipo_hor = ? ";
-	private final String ELIMINAR = "DELETE FROM trabajadorcon WHERE cve_tracon = ?";
+	private final String ELIMINAR = "DELETE FROM horario WHERE cve_hor = ?";
 
 	protected HorarioDAO(Connection con) {
 		super(con);
@@ -57,7 +57,7 @@ public class HorarioDAO  extends DAO<Horario, Integer>{
 			stat = con.prepareStatement(MODIFICAR);
 			stat.setDate(1, Utileria.getDate(t.getFecha()));
 			stat.setString(2, t.getTipo());
-			
+
 			if (stat.executeUpdate() == 0) {
 				throw new SQLException("Usuario ya Registrado");
 			}
@@ -80,12 +80,12 @@ public class HorarioDAO  extends DAO<Horario, Integer>{
 			throw e;
 		} finally {
 			cerrarSt();
-		}		
+		}
 	}
 
 	@Override
 	public Horario obtener(Integer clave) throws SQLException {
-		Horario hr=null;
+		Horario hr = null;
 		try {
 			stat = con.prepareStatement(OBTENER_UNO);
 			stat.setInt(1, clave);
@@ -106,13 +106,13 @@ public class HorarioDAO  extends DAO<Horario, Integer>{
 
 	@Override
 	public Horario buscar(Horario objeto) throws SQLException {
-		Horario hr=null;
-		
+		Horario hr = null;
+
 		try {
 			stat = con.prepareStatement(BUSCAR);
 			stat.setDate(1, Utileria.getDate(objeto.getFecha()));
-			stat.setString(2, objeto.getTipo());set =
-					stat.executeQuery();
+			stat.setString(2, objeto.getTipo());
+			set = stat.executeQuery();
 			if (set.next()) {
 				hr = convertir(set);
 			} else {
@@ -129,8 +129,8 @@ public class HorarioDAO  extends DAO<Horario, Integer>{
 
 	@Override
 	public List<Horario> obtenerTodos() {
-		List<Horario> hr=new ArrayList<>();
-		
+		List<Horario> hr = new ArrayList<>();
+
 		try {
 			stat = con.prepareStatement(OBTENER_TODOS);
 			set = stat.executeQuery();
@@ -148,12 +148,17 @@ public class HorarioDAO  extends DAO<Horario, Integer>{
 
 	@Override
 	protected Horario convertir(ResultSet set) throws SQLException {
-		Horario hr =new Horario();
+		Horario hr = new Horario();
 		hr.setCve(set.getInt(1));
 		hr.setFecha(Utileria.getLocalDate(set.getDate("fecha_hor")));
 		hr.setTipo(set.getString("tipo_hor"));
-		
+
 		return hr;
+	}
+
+	@Override
+	public List<Horario> buscarPatron(Horario Objeto) {
+		return null;
 	}
 
 }

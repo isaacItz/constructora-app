@@ -198,4 +198,10 @@ public class PersonaDAO extends DAO<Persona, Integer> {
 		per.obtenerTodos().forEach(x -> System.out.println(x));
 		System.out.println("adios");
 	}
+
+	@Override
+	public List<Persona> buscarPatron(Persona Objeto) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

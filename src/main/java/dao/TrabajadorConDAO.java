@@ -116,9 +116,7 @@ public class TrabajadorConDAO extends DAO<TrabajadorCon, Integer> {
 		return tc;
 	}
 
-	@Override
 	public TrabajadorCon buscar(TrabajadorCon objeto) throws SQLException {
-		// TODO Auto-generated method stub
 		TrabajadorCon tc = null;
 		try {
 			stat = con.prepareStatement(BUSCAR);
@@ -180,6 +178,11 @@ public class TrabajadorConDAO extends DAO<TrabajadorCon, Integer> {
 		tra = dao.buscar(tra);
 		System.out.println(tra);
 
+	}
+
+	@Override
+	public List<TrabajadorCon> buscarPatron(TrabajadorCon Objeto) {
+		return null;
 	}
 
 }

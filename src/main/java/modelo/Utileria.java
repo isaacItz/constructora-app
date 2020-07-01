@@ -23,7 +23,6 @@ public class Utileria {
 	}
 
 	public static LocalTime getLocalTime(Time time) {
-		System.out.println(time);
 		return LocalTime.parse(time.toString());
 	}
 

@@ -4,12 +4,17 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import modelo.DiaHora;
+import modelo.Horario;
 
 public class PanelHorario extends JPanel {
 	/**
@@ -345,6 +350,17 @@ public class PanelHorario extends JPanel {
 		btnLimpiar.addActionListener(d -> limpiar());
 		validarCajas();
 
+	}
+
+	public Horario getHorario() {
+		Horario hor = new Horario();
+		return hor;
+	}
+
+	public DiaHora[] getDiaHora() {
+		List<DiaHora> diasHora = new ArrayList<>();
+
+		return diasHora.toArray(new DiaHora[diasHora.size()]);
 	}
 
 	private void validarCajas() {
