@@ -18,7 +18,7 @@ public class DiaHoraDAO extends DAO<DiaHora, Integer>{
 	private final String OBTENER_TODOS = "SELECT * FROM diahora";
 	private final String OBTENER_UNO = "SELECT * FROM diahora WHERE cve_hor = ?";
 	private final String BUSCAR = "SELECT * FROM diahora WHERE cve_hor = ? ";
-	private final String ELIMINAR = "DELETE FROM trabajadorcon WHERE cve_hor = ?";
+	private final String ELIMINAR = "DELETE FROM diahora WHERE cve_hor = ?";
 
 	
 	protected DiaHoraDAO(Connection con) {
