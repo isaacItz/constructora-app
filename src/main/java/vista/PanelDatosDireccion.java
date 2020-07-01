@@ -8,6 +8,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import modelo.Direccion;
+import modelo.Utileria;
+
 public class PanelDatosDireccion extends JPanel {
 	/**
 	 * 
@@ -22,6 +25,7 @@ public class PanelDatosDireccion extends JPanel {
 	private JTextField referencias;
 	private JTextField entreCalle1;
 	private JTextField entreCalle2;
+	private JTextField tipoVia;
 
 	public PanelDatosDireccion() {
 		setLayout(new GridLayout(0, 2, 0, 0));
@@ -32,6 +36,13 @@ public class PanelDatosDireccion extends JPanel {
 		nombre = new JTextField();
 		add(nombre);
 		nombre.setColumns(10);
+
+		JLabel lblTipoDeVia = new JLabel("Tipo de Via");
+		add(lblTipoDeVia);
+
+		tipoVia = new JTextField();
+		add(tipoVia);
+		tipoVia.setColumns(10);
 
 		JLabel lblApellidoPaterno = new JLabel("Numero");
 		add(lblApellidoPaterno);
@@ -95,6 +106,18 @@ public class PanelDatosDireccion extends JPanel {
 		Colonia.setColumns(10);
 		add(Colonia);
 
+	}
+
+	public Direccion getDireccion() {
+		Direccion dir = new Direccion();
+		dir.setCalle(nombre.getText());
+		dir.setTipovia(tipoVia.getText());
+		dir.setEntrecalles(entreCalle1.getText().concat(":").concat(entreCalle2.getText()));
+		dir.setOrientacion(orientacion.getText());
+		dir.setReferencias(referencias.getText());
+		dir.setCveCol(Utileria.getInteger(codigoPostal));
+
+		return dir;
 	}
 
 }

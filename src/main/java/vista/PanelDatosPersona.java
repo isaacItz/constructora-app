@@ -12,10 +12,11 @@ import javax.swing.JTextField;
 
 import com.toedter.calendar.JDateChooser;
 
+import modelo.Persona;
+import modelo.Utileria;
+
 public class PanelDatosPersona extends JPanel {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	private JTextField nombre;
 	private JTextField paterno;
@@ -25,6 +26,9 @@ public class PanelDatosPersona extends JPanel {
 	private JTextField tel;
 	private JDateChooser fechaNac;
 	private ButtonGroup grupo;
+	private JRadioButton femenino;
+	private JRadioButton masculino;
+	private JComboBox<String> estadoCivil;
 
 	public PanelDatosPersona() {
 		setLayout(new GridLayout(0, 2, 0, 0));
@@ -59,11 +63,11 @@ public class PanelDatosPersona extends JPanel {
 		add(panel);
 		panel.setLayout(new GridLayout(1, 2, 0, 0));
 
-		JRadioButton femenino = new JRadioButton("Femenino");
+		femenino = new JRadioButton("Femenino");
 		panel.add(femenino);
 		grupo.add(femenino);
 
-		JRadioButton masculino = new JRadioButton("Masculino");
+		masculino = new JRadioButton("Masculino");
 		panel.add(masculino);
 		grupo.add(masculino);
 
@@ -76,7 +80,7 @@ public class PanelDatosPersona extends JPanel {
 		JLabel lblNombre_3_3 = new JLabel("Estado Civil");
 		add(lblNombre_3_3);
 
-		JComboBox<String> estadoCivil = new JComboBox<>();
+		estadoCivil = new JComboBox<>();
 		estadoCivil.setModel(new DefaultComboBoxModel<String>(new String[] { "Casado", "Soltero", "Separado" }));
 		add(estadoCivil);
 
@@ -101,6 +105,23 @@ public class PanelDatosPersona extends JPanel {
 		tel.setColumns(10);
 		add(tel);
 
+	}
+
+	public Persona getPersona() {
+		Persona per = new Persona();
+		per.setNombre(nombre.getText());
+		per.setApMaterno(materno.getText());
+		per.setApPaterno(paterno.getText());
+		if (femenino.isSelected())
+			per.setGenero("Femenino");
+		else
+			per.setGenero("Masculino");
+		per.setFechaNac(Utileria.getLocalDate(fechaNac.getDate().getTime()));
+		per.setEdoCivil(estadoCivil.getSelectedItem().toString());
+		per.setCurp(curp.getText());
+		per.setMail(mail.getText());
+		per.setTelefono(Utileria.getLong(tel));
+		return per;
 	}
 
 }
