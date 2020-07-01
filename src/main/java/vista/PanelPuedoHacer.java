@@ -141,6 +141,10 @@ public class PanelPuedoHacer extends JPanel {
 		return list.toArray(new PuedoHacer[list.size()]);
 	}
 
+	public boolean validar() {
+		return getPuedoHacer().length > 0;
+	}
+
 	private void moverDerecha() {
 		int index = disponibles.getSelectedIndex();
 		if (index > -1) {

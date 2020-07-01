@@ -175,7 +175,7 @@ public class PanelDatosDireccion extends JPanel {
 
 	}
 
-	public boolean validarCP() {
+	private boolean validarCP() {
 		if (cols.size() > 0) {
 			getCiudadSeleccionada();
 			if (cols.get(0).getCveCiu() == getCiudadSeleccionada().getCve()) {
@@ -188,8 +188,32 @@ public class PanelDatosDireccion extends JPanel {
 	}
 
 	public boolean validar() {
+		if (nombre.getText().isEmpty()) {
+			Utileria.error("Ingrese la Calle");
+			nombre.requestFocus();
+			return false;
+		}
+		if (!Utileria.validarNumero(numero)) {
+			Utileria.error("Ingrese un Numero de Casa");
+			numero.requestFocus();
+		}
+		if (ciudad.getSelectedIndex() < 0) {
+			Utileria.error("Seleccione una Ciudad");
+			return false;
+		}
 
-		return false;
+		if (codigoPostal.getText().isEmpty()) {
+			Utileria.error("Ingrese un Codigo Postal");
+			codigoPostal.requestFocus();
+			return false;
+		}
+		if (!validarCP()) {
+			Utileria.error("Codigo Postal no Pertenece a la Ciudad");
+			codigoPostal.requestFocus();
+			return false;
+		}
+
+		return true;
 	}
 
 	public Direccion getDireccion() {

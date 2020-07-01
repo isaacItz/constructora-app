@@ -21,7 +21,7 @@ public class PersonaDAO extends DAO<Persona, Integer> {
 			+ "edocivil_per = ?, curp = ?, mail_per = ?, tel_per = ? where cve_per = ?";
 	private final String OBTENER_TODOS = "SELECT * FROM persona";
 	private final String OBTENER_UNO = "select * FROM persona WHERE cve_per = ?";
-	private final String BUSCAR = "SELECT * FROM persona WHERE nom_per = ?, ap_per = ?, am_per = ?, curp = ?";
+	private final String BUSCAR = "SELECT * FROM persona WHERE curp = ?";
 	private final String ELIMINAR = "DELETE FROM persona WHERE cve_per = ?";
 
 	PersonaDAO(Connection con) {
@@ -131,9 +131,6 @@ public class PersonaDAO extends DAO<Persona, Integer> {
 		try {
 			stat = con.prepareStatement(BUSCAR);
 			stat.setString(1, objeto.getNombre());
-			stat.setString(2, objeto.getApPaterno());
-			stat.setString(3, objeto.getApMaterno());
-			stat.setString(4, objeto.getCurp());
 			set = stat.executeQuery();
 			if (set.next()) {
 				per = convertir(set);

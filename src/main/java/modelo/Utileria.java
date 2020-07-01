@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 public class Utileria {
@@ -25,6 +26,10 @@ public class Utileria {
 		} catch (Exception e) {
 			return 0.0;
 		}
+	}
+
+	public static void error(String m) {
+		JOptionPane.showMessageDialog(null, m, "Error", JOptionPane.ERROR_MESSAGE);
 	}
 
 	public static LocalDate getLocalDate(Date fecha) {
@@ -62,6 +67,10 @@ public class Utileria {
 		} catch (Exception e) {
 			return null;
 		}
+	}
+
+	public static boolean validarNumero(JTextField numero) {
+		return getInteger(numero) == null ? false : true;
 	}
 
 }

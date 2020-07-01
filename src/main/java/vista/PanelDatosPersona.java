@@ -1,6 +1,7 @@
 package vista;
 
 import java.awt.GridLayout;
+import java.sql.SQLException;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
@@ -12,6 +13,7 @@ import javax.swing.JTextField;
 
 import com.toedter.calendar.JDateChooser;
 
+import modelo.Main;
 import modelo.Persona;
 import modelo.Utileria;
 
@@ -125,8 +127,48 @@ public class PanelDatosPersona extends JPanel {
 	}
 
 	public boolean validar() {
+		if (nombre.getText().isEmpty()) {
+			Utileria.error("Ingrese un Nombre");
+			nombre.requestFocus();
+			return false;
+		}
+		if (paterno.getText().isEmpty()) {
+			Utileria.error("Ingrese Apellido Paterno");
+			paterno.requestFocus();
+			return false;
+		}
+		if (materno.getText().isEmpty()) {
+			Utileria.error("Ingrese Apellido Materno");
+			materno.requestFocus();
+			return false;
+		}
+		if (!(masculino.isSelected() || femenino.isSelected())) {
+			Utileria.error("Selexione el Genero");
+			return false;
+		}
+		if (curp.getText().isEmpty()) {
+			Utileria.error("Ingrese la Curp");
+			curp.requestFocus();
+			return false;
+		}
+		Persona per = new Persona();
+		per.setCurp(curp.getText());
+		try {
+			if (Main.baseDatos.getPersonaDAO().buscar(per) != null) {
+				Utileria.error("Persona ya Registrada");
+				curp.requestFocus();
+				return false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (mail.getText().isEmpty()) {
+			Utileria.error("Ingrese un correo Electronico");
+			mail.requestFocus();
+			return false;
+		}
 
-		return false;
+		return true;
 	}
 
 }

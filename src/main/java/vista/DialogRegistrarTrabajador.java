@@ -91,7 +91,7 @@ public class DialogRegistrarTrabajador extends JDialog {
 		getContentPane().add(buttonPane, BorderLayout.SOUTH);
 		JButton okButton = new JButton("Guardar");
 		okButton.setActionCommand("OK");
-		okButton.addActionListener(x -> registrarPersona());
+		okButton.addActionListener(x -> validarEmpleado());
 		buttonPane.add(okButton);
 		getRootPane().setDefaultButton(okButton);
 		JButton cancelButton = new JButton("Cancelar");
@@ -138,6 +138,7 @@ public class DialogRegistrarTrabajador extends JDialog {
 	}
 
 	private void registrarPersona() {
+
 		Direccion dir = panelDireccion.getDireccion();
 		Persona per = panelPersona.getPersona();
 		TrabajadorCon tra = panelTipoTra.getTrabajador();
@@ -212,8 +213,18 @@ public class DialogRegistrarTrabajador extends JDialog {
 		}
 	}
 
-	private boolean validarEmpleado() {
-		return panelPersona.validar();
+	private void validarEmpleado() {
+		if (panelPersona.validar()) {
+			if (panelDireccion.validar()) {
+				if (panelHorario.validar()) {
+					if (panelTipoTra.validar()) {
+						if (panelPuedoHacer.validar()) {
+							registrarPersona();
+						}
+					}
+				}
+			}
+		}
 	}
 
 	private void setActividaes() {

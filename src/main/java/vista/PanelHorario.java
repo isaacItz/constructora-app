@@ -18,6 +18,7 @@ import javax.swing.JTextField;
 
 import modelo.DiaHora;
 import modelo.Horario;
+import modelo.Utileria;
 
 public class PanelHorario extends JPanel {
 	/**
@@ -402,27 +403,15 @@ public class PanelHorario extends JPanel {
 			System.out.println(dias[i].getName());
 			if (dias[i].isSelected()) {
 				if (!camposhoras[i * 2].getText().isEmpty() || !camposhoras[i * 2 + 1].getText().isEmpty()) {
-					if (new Integer(camposhoras[i * 2 + 1].getText().split(":")[0]) > new Integer(
-							camposhoras[i * 2].getText().split(":")[0])) {
+					if (validarHora(camposhoras[i * 2], camposhoras[i * 2 + 1])) {
 						DiaHora diaHora = new DiaHora();
 						diaHora.setDia(i + 1);
 						diaHora.setHoren(LocalTime.parse(camposhoras[i * 2].getText()));
 						diaHora.setHorsal(LocalTime.parse(camposhoras[i * 2 + 1].getText()));
 						diashora.add(diaHora);
 					} else {
-						if (new Integer(camposhoras[i * 2 + 1].getText().split(":")[0]) > new Integer(
-								camposhoras[i * 2].getText().split(":")[0])
-								&& new Integer(camposhoras[i * 2 + 1].getText().split(":")[1]) > new Integer(
-										camposhoras[i * 2].getText().split(":")[1])) {
-							DiaHora diaHora = new DiaHora();
-							diaHora.setDia(i + 1);
-							diaHora.setHoren(LocalTime.parse(camposhoras[i * 2].getText()));
-							diaHora.setHorsal(LocalTime.parse(camposhoras[i * 2 + 1].getText()));
-							diashora.add(diaHora);
-						} else {
-							JOptionPane.showMessageDialog(null, "Datos no validos para el día " + dias[i].getName());
-							return null;
-						}
+						JOptionPane.showMessageDialog(null, "Datos no validos para el día " + dias[i].getName());
+						return null;
 					}
 				} else {
 					JOptionPane.showMessageDialog(null, "Datos no validos para el día " + dias[i].getName());
@@ -431,6 +420,26 @@ public class PanelHorario extends JPanel {
 			}
 		}
 		return diashora.toArray(new DiaHora[diashora.size()]);
+
+	}
+
+	public boolean validar() {
+		if (getDiaHora() == null) {
+			Utileria.error("Datos Invalidos para el Horario");
+			return false;
+		}
+		if (getDiaHora().length == 0) {
+			Utileria.error("Ingrese al Menos un Dia");
+			return false;
+		}
+		return true;
+	}
+
+	private boolean validarHora(JTextField t1, JTextField t2) {
+		LocalTime ti1 = LocalTime.parse(t1.getText());
+		LocalTime ti2 = LocalTime.parse(t2.getText());
+
+		return ti1.isBefore(ti2);
 	}
 
 }
