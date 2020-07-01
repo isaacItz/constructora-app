@@ -4,11 +4,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.mysql.cj.jdbc.exceptions.CommunicationsException;
 
 import modelo.TrabajadorCon;
 import modelo.Utileria;
@@ -167,17 +164,6 @@ public class TrabajadorConDAO extends DAO<TrabajadorCon, Integer> {
 		tc.setPuesto(set.getString("puesto_tracon"));
 		tc.setSalario(set.getDouble("sueldo_tracon"));
 		return tc;
-	}
-
-	public static void main(String[] args) throws CommunicationsException, SQLException {
-		BaseDatos bd = new BaseDatos("isaac", "holadocker".toCharArray(), null, null);
-		TrabajadorConDAO dao = new TrabajadorConDAO(bd.getConnection());
-		TrabajadorCon tra = new TrabajadorCon(null, LocalDate.now(), LocalDate.now().plusDays(1000), "Chalan", 8000.0,
-				2);
-		System.out.println(tra);
-		tra = dao.buscar(tra);
-		System.out.println(tra);
-
 	}
 
 }

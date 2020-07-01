@@ -201,6 +201,9 @@ public class DialogRegistrarTrabajador extends JDialog {
 				e.printStackTrace();
 			}
 		}
+		
+		Main.baseDatos.commit();
+		
 		System.out.println(dir);
 		System.out.println(per);
 		System.out.println(tra);

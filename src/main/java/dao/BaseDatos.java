@@ -120,8 +120,12 @@ public class BaseDatos {
 		}
 	}
 
-	public Connection getConnection() {
-		return conexion;
+	public void commit() {
+		try {
+			conexion.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public String getRoll() {

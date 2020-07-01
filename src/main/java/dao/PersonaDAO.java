@@ -8,8 +8,6 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mysql.cj.jdbc.exceptions.CommunicationsException;
-
 import modelo.Persona;
 import modelo.Utileria;
 
@@ -179,22 +177,6 @@ public class PersonaDAO extends DAO<Persona, Integer> {
 		persona.setTelefono(set.getLong("tel_per"));
 
 		return persona;
-	}
-
-	public static void main(String[] args) throws CommunicationsException, SQLException {
-
-		BaseDatos bd = new BaseDatos("isaac", "holadocker".toCharArray(), null, null);
-		PersonaDAO per = new PersonaDAO(bd.getConnection());
-		Persona yo = per.obtener(1);
-		yo.setNombre("Ronaldo");
-		yo.setApMaterno("perez");
-		yo.setMail("yoMero@myMail.com");
-		yo.setCurp("micurpaquiva");
-		yo.setTelefono(null);
-		yo.setCve(null);
-		per.insertar(yo);
-		per.obtenerTodos().forEach(x -> System.out.println(x));
-		System.out.println("adios");
 	}
 
 }
