@@ -32,11 +32,15 @@ public class BaseDatos {
 			throws SQLException, CommunicationsException {
 		if (user != null || password != null) {
 
-			if (host == null || port == null)
+			if (host == null || port == null) {
 				conexion = DriverManager.getConnection(DEFAULT_URL, user, String.valueOf(password));
-			else
-				conexion = DriverManager.getConnection("jdbc:mysql://" + host + port + "/consC?serverTimezone=UTC",
-						user, String.valueOf(password));
+			} else {
+				conexion = DriverManager.getConnection(
+						"jdbc:mysql://" + host + ":" + port + "/consC?serverTimezone=UTC", user,
+						String.valueOf(password));
+			}
+
+			System.out.println(conexion);
 			System.out.println("conexion creada");
 			System.out.println("rol: " + getRoll());
 			conexion.setAutoCommit(false);
@@ -117,6 +121,7 @@ public class BaseDatos {
 		if (conexion != null) {
 			try {
 				conexion.close();
+				System.out.println("cerrando Conexion");
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -132,7 +137,7 @@ public class BaseDatos {
 	}
 
 	public String getRoll() {
-		String[] roles = { "secretaria", "administrador", "albañil", "jefe obra", "cliente" };
+		String[] roles = { "Recursos Humanos", "Chalan" };
 
 		for (String string : roles) {
 			if (probarRol(string))
@@ -148,24 +153,19 @@ public class BaseDatos {
 			ps.setString(1, user);
 			ps.setString(2, pass);
 			ps.setString(3, rol);
+			ps.executeUpdate();
 			Utileria.mensaje("Usuario Registrado");
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
 	}
 
-	public static void main(String[] args) throws CommunicationsException, SQLException {
-		BaseDatos bd = new BaseDatos("isaac", "holadocker".toCharArray(), null, null);
-		bd.crearUser("roberto", "carlos", BaseDatos.ROLES[0]);
-	}
-
 	private boolean probarRol(String rol) {
 		Statement st;
 		try {
 			st = conexion.createStatement();
-			return st.execute("show grants for current_user() USING " + rol);
+			return st.execute("show grants for current_user() USING '" + rol.concat("'"));
 		} catch (SQLException e) {
 			return false;
 		}

@@ -5,8 +5,6 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -100,21 +98,12 @@ public class DialogRegistrarTrabajador extends JDialog {
 		JButton cancelButton = new JButton("Cancelar");
 		cancelButton.setActionCommand("Cancel");
 		buttonPane.add(cancelButton);
-		addWindowListener(new OyenteSalida());
 
 		roles = panelTipoTra.getRoles();
 
 		roles.addActionListener(z -> agregarPuedoHacer());
 		setActividaes();
 		validate();
-	}
-
-	class OyenteSalida extends WindowAdapter {
-		@Override
-		public void windowClosing(WindowEvent e) {
-			super.windowClosing(e);
-			Main.baseDatos.cerrarConexion();
-		}
 	}
 
 	private void agregarPuedoHacer() {
@@ -151,6 +140,10 @@ public class DialogRegistrarTrabajador extends JDialog {
 		Horario hor = panelHorario.getHorario();
 		DiaHora[] diasHora = panelHorario.getDiaHora();
 ////////////////////////////////
+
+		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		String pwd = RandomStringUtils.random(5, characters);
+
 		try {
 			Main.baseDatos.getDireccionDAO().insertar(dir);
 		} catch (SQLException e) {
@@ -164,7 +157,10 @@ public class DialogRegistrarTrabajador extends JDialog {
 			e.printStackTrace();
 		}
 
+		String user = per.getApPaterno().concat(per.getNombre()).concat(per.getCve().toString());
+
 		tra.setCvePer(per.getCve());
+		tra.setUser(user);
 		try {
 			Main.baseDatos.getTrabajadorConDAO().insertar(tra);
 		} catch (SQLException e) {
@@ -199,11 +195,6 @@ public class DialogRegistrarTrabajador extends JDialog {
 			}
 		}
 
-		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()-_=+[{]}\\|;:\'\",<.>/?";
-		String pwd = RandomStringUtils.random(10, characters);
-
-//		Main.baseDatos.commit();
-		String user = per.getApPaterno().concat(per.getNombre()).concat(per.getCve().toString());
 		Main.baseDatos.crearUser(user, pwd, roles.getSelectedItem().toString());
 
 		Utileria.mensaje("Usuario: " + user + "\nContraseña: " + pwd);

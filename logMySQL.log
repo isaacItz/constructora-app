@@ -6,3 +6,8 @@
 2020-07-01T21:46:42.449336Z 0 [System] [MY-010931] [Server] /usr/local/mysql-8.0.20-linux-glibc2.12-x86_64/bin/mysqld: ready for connections. Version: '8.0.20'  socket: '/tmp/mysql.sock'  port: 3306  MySQL Community Server - GPL.
 2020-07-01T21:46:42.670191Z 8 [Warning] [MY-010056] [Server] Host name 'customer-ZITA-49-150.megared.net.mx' could not be resolved: Name or service not known
 2020-07-01T21:49:41.674287Z 10 [Warning] [MY-010055] [Server] IP address '13.66.135.53' could not be resolved: Name or service not known
+2020-07-01T22:10:45.484746Z 20 [Warning] [MY-010056] [Server] Host name 'customer-ZITA-48-132.megared.net.mx' could not be resolved: Name or service not known
+2020-07-01T22:24:20.200304Z 27 [Warning] [MY-013360] [Server] Plugin sha256_password reported: ''sha256_password' is deprecated and will be removed in a future release. Please use caching_sha2_password instead'
+2020-07-01T23:05:48.809027Z 47 [Warning] [MY-010056] [Server] Host name 'zg-0626a-287.stretchoid.com' could not be resolved: Name or service not known
+2020-07-02T00:14:19.329492Z 72 [Warning] [MY-013360] [Server] Plugin sha256_password reported: ''sha256_password' is deprecated and will be removed in a future release. Please use caching_sha2_password instead'
+2020-07-02T01:23:24.325695Z 90 [Warning] [MY-010055] [Server] IP address '45.134.168.209' could not be resolved: Name or service not known

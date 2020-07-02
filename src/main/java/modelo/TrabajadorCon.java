@@ -10,6 +10,7 @@ public class TrabajadorCon {
 	private String puesto;
 	private double salario;
 	private int cvePer;
+	private String user;
 
 	public TrabajadorCon() {
 	}
@@ -21,7 +22,7 @@ public class TrabajadorCon {
 	}
 
 	public TrabajadorCon(Integer cve, LocalDate fechIniCon, LocalDate fechFinCon, String puesto, double salario,
-			int cvePer) {
+			int cvePer, String user) {
 		super();
 		this.cve = cve;
 		this.fechIniCon = fechIniCon;
@@ -29,6 +30,7 @@ public class TrabajadorCon {
 		this.puesto = puesto;
 		this.salario = salario;
 		this.cvePer = cvePer;
+		this.user = user;
 	}
 
 	public Integer getCve() {
@@ -79,10 +81,18 @@ public class TrabajadorCon {
 		this.cvePer = cvePer;
 	}
 
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
 	@Override
 	public String toString() {
 		return "TrabajadorCon [cve=" + cve + ", fechIniCon=" + fechIniCon + ", fechFinCon=" + fechFinCon + ", puesto="
-				+ puesto + ", salario=" + salario + ", cvePer=" + cvePer + "]";
+				+ puesto + ", salario=" + salario + ", cvePer=" + cvePer + ", user=" + user + "]";
 	}
 
 }

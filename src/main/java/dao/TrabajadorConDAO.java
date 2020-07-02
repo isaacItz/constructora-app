@@ -12,11 +12,12 @@ import modelo.Utileria;
 
 public class TrabajadorConDAO extends DAO<TrabajadorCon, Integer> {
 
-	private final String INSERT = "INSERT INTO trabajadorcon (fi_tracon, ff_tracon, puesto_tracon, sueldo_tracon, cve_per) VALUES (?, ?, ?, ?, ?)";
+	private final String INSERT = "INSERT INTO trabajadorcon (fi_tracon, ff_tracon, puesto_tracon, sueldo_tracon, cve_per, user)"
+			+ " VALUES (?, ?, ?, ?, ?, ?)";
 	private final String MODIFICAR = "UPDATE trabajadorcon SET fi_tracon = ?, ff_tracon = ?, puesto_tracon = ?, sueldo_tracon = ? WHERE cve_tracon = ?";
 	private final String OBTENER_TODOS = "SELECT * FROM trabajadorcon";
 	private final String OBTENER_UNO = "SELECT * FROM trabajadorcon WHERE cve_tracon = ?";
-	private final String BUSCAR = "SELECT * FROM trabajadorcon WHERE fi_tracon = ? AND ff_tracon = ? AND puesto_tracon= ?";
+	private final String BUSCAR = "SELECT * FROM trabajadorcon WHERE user= ?";
 	private final String ELIMINAR = "DELETE FROM trabajadorcon WHERE cve_tracon = ?";
 
 	TrabajadorConDAO(Connection con) {
@@ -33,6 +34,7 @@ public class TrabajadorConDAO extends DAO<TrabajadorCon, Integer> {
 			stat.setString(3, t.getPuesto());
 			stat.setDouble(4, t.getSalario());
 			stat.setInt(5, t.getCvePer());
+			stat.setString(6, t.getUser());
 
 			if (stat.executeUpdate() == 0) {
 				throw new SQLException("Usuario ya Registrado");
@@ -135,6 +137,28 @@ public class TrabajadorConDAO extends DAO<TrabajadorCon, Integer> {
 		return tc;
 	}
 
+	public TrabajadorCon buscarUser(TrabajadorCon objeto) throws SQLException {
+		TrabajadorCon tc = null;
+		try {
+			stat = con.prepareStatement(BUSCAR);
+			stat.setDate(1, Utileria.getDate(objeto.getFechIniCon()));
+			stat.setDate(2, Utileria.getDate(objeto.getFechFinCon()));
+			stat.setString(3, objeto.getPuesto());
+			set = stat.executeQuery();
+			if (set.next()) {
+				tc = convertir(set);
+			} else {
+				throw new SQLException("No Existe el Contrato");
+			}
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			cerrarRs();
+			cerrarSt();
+		}
+		return tc;
+	}
+
 	@Override
 	public List<TrabajadorCon> obtenerTodos() {
 		List<TrabajadorCon> contra = new ArrayList<>();
@@ -163,6 +187,7 @@ public class TrabajadorConDAO extends DAO<TrabajadorCon, Integer> {
 		tc.setFechFinCon(Utileria.getLocalDate(set.getDate("ff_tracon")));
 		tc.setPuesto(set.getString("puesto_tracon"));
 		tc.setSalario(set.getDouble("sueldo_tracon"));
+		tc.setUser(set.getString("user"));
 		return tc;
 	}
 
