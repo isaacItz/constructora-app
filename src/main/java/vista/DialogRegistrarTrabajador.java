@@ -141,7 +141,7 @@ public class DialogRegistrarTrabajador extends JDialog {
 		DiaHora[] diasHora = panelHorario.getDiaHora();
 ////////////////////////////////
 
-		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		String characters = "ABCDEFGHJKMNOPQRSTUVWXYZabcdefghjkmnopqrstuvwxyz0123456789";
 		String pwd = RandomStringUtils.random(5, characters);
 
 		try {

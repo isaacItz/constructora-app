@@ -23,7 +23,8 @@ public class Main {
 			user = login.getUser();
 			password = login.getPassword();
 			try {
-				baseDatos = new BaseDatos(user, password, "localhost", 3308);
+//				baseDatos = new BaseDatos(user, password, "localhost", 3308);
+				baseDatos = new BaseDatos(user, password, null, null);
 				if (baseDatos.getRoll().equals("Recursos Humanos")) {
 					VistaPrincipalRH vistaP = new VistaPrincipalRH();
 					vistaP.setVisible(true);
@@ -33,7 +34,7 @@ public class Main {
 				}
 
 			} catch (SQLException e) {
-//				e.printStackTrace();
+				e.printStackTrace();
 				JOptionPane.showMessageDialog(null, "Usuario o Contraseña Incorrecto");
 			}
 
